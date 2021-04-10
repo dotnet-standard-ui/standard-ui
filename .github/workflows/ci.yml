@@ -1,7 +1,7 @@
 # This workflow was stared from the default GitHub workflow for .NET Core WP
 # desktop apps. See more details here https://github.com/microsoft/github-actions-for-desktop-apps
 
-name: Build and Test
+name: CI
 
 on:
   push:
@@ -27,15 +27,17 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
 
-    # Install the .NET Core workload
-    - name: Install .NET Core
+    - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
 
-    # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: dotnet test
+    - name: Restore dependencies
+      run: dotnet restore $env:Solution_Name
+
+    - name: Build
+      run: dotnet build --no-restore $env:Solution_Name
+
+    - name: Test
+      run: dotnet test --no-build --verbosity normal $env:Solution_Name
