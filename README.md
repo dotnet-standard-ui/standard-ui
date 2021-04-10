@@ -1,3 +1,5 @@
+[![CI](https://github.com/dotnet-standard-ui/standard-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/dotnet-standard-ui/standard-ui/actions/workflows/ci.yml)
+
 # 🐱‍🐉 DinoCat
 
 A proof of concept C# UI library. Goals are current highly aspirational. See [Progress](README.md#Progress) for current progress.
