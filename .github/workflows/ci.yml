@@ -1,0 +1,43 @@
+# This workflow was stared from the default GitHub workflow for .NET Core WP
+# desktop apps. See more details here https://github.com/microsoft/github-actions-for-desktop-apps
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build-and-test:
+
+    strategy:
+      matrix:
+        configuration: [Debug]    # Later add Release when needed
+
+    runs-on: windows-2019    # For a list of available runner types, refer to
+                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    env:
+      Solution_Name: StandardUI.sln
+      Test_Project_Path: tests/StandardUI.Base.Tests.csproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore $env:Solution_Name
+
+    - name: Build
+      run: dotnet build --no-restore $env:Solution_Name
+
+    - name: Test
+      run: dotnet test --no-build --verbosity normal $env:Solution_Name
