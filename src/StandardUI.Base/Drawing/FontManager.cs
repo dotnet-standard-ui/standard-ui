@@ -8,7 +8,7 @@ namespace Microsoft.StandardUI.Drawing
 {
     public class FontManager : IFontManager
     {
-        private SKFontManager fontManager;
+        SKFontManager fontManager;
         public FontManager(SKFontManager fontManager) => this.fontManager = fontManager;
 
         public ITypeface CreateTypeface(string fontName)
@@ -34,11 +34,11 @@ namespace Microsoft.StandardUI.Drawing
             buffer.Direction = flow == FlowDirection.LeftToRight ? Direction.LeftToRight : Direction.RightToLeft;
             buffer.AddUtf16(text);
 
-            SKShaper shaper = new((SKTypeface)typeface.NativeObject);
-            var result = shaper.Shape(buffer, paint);
-
             SKFont font = new(paint.Typeface, realFontPt);
-            font.BaselineSnap = true;
+            var metrics = font.Metrics;
+
+            SKShaper shaper = new((SKTypeface)typeface.NativeObject);
+            var result = shaper.Shape(buffer, 0, -metrics.Ascent, paint);
 
             using SKTextBlobBuilder builder = new();
             var run = builder.AllocatePositionedRun(font, result.Codepoints.Length);
@@ -60,14 +60,13 @@ namespace Microsoft.StandardUI.Drawing
                 width = result.Points[result.Points.Length - 1].X + widths[0];
             }
 
-            var metrics = font.Metrics;
             var blob = builder.Build();
             return new FormattedText(blob, width / scale.X, metrics.Ascent / scale.Y, metrics.Descent / scale.Y, text, brush.Into());
         }
 
-        private class Typeface : ITypeface
+        class Typeface : ITypeface
         {
-            private SKTypeface typeface;
+            SKTypeface typeface;
             public Typeface(SKTypeface typeface) => this.typeface = typeface;
 
             public string FamilyName => typeface.FamilyName;

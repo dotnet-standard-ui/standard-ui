@@ -38,7 +38,6 @@ namespace Microsoft.StandardUI.Drawing
             canvas.Save();
             try
             {
-                canvas.Translate(offset.X, offset.Y - txt.Ascent);
                 canvas.Scale(1 / sx, 1 / sy);
                 canvas.DrawText(txt.Blob, 0, 0, txt.Paint);
             }
