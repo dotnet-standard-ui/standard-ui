@@ -3,7 +3,7 @@ using System.Windows.Automation.Peers;
 
 namespace Microsoft.StandardUI.Wpf.Automation
 {
-    internal class InputGroupAutomationPeer : FrameworkElementAutomationPeer
+    internal class InputGroupAutomationPeer : UIElementAutomationPeer
     {
         private InputNode node;
 

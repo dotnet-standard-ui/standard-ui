@@ -8,10 +8,8 @@
         xmlns:local="clr-namespace:Interop.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <StackPanel>
-            <dino:Button Content="dino:Button" Click="Button_Click" />
-            <local:DinoControlWrapper Incomming="Hello World" />
-        </StackPanel>
-    </Grid>
+    <StackPanel>
+        <dino:Button Content="dino:Button" Click="Button_Click" HorizontalAlignment="Center" />
+        <local:DinoControlWrapper Incomming="Hello World" HorizontalAlignment="Center" />
+    </StackPanel>
 </Window>

@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using Colors = Microsoft.StandardUI.Drawing.Colors;
 using DpiScale = Microsoft.StandardUI.Drawing.DpiScale;
 using WpfDpiScale = System.Windows.DpiScale;
+using WpfRect = System.Windows.Rect;
 using WpfSize = System.Windows.Size;
 
 namespace Microsoft.StandardUI.Wpf
@@ -39,7 +40,7 @@ namespace Microsoft.StandardUI.Wpf
             Focusable = false;
         }
 
-        public Host(Func<Element> rootElement): this() => RootElement = rootElement;
+        public Host(Func<Element> rootElement) : this() => RootElement = rootElement;
 
         void Root_RootNodeChanged(object? sender, EventArgs e) =>
             rootLayer.RootNode = root.RootNode;
@@ -60,8 +61,8 @@ namespace Microsoft.StandardUI.Wpf
         protected override WpfSize ArrangeOverride(WpfSize finalSize)
         {
             MaybeInitialize();
-            rootLayer.Arrange(new(rootLayer.DesiredSize));
-            return rootLayer.DesiredSize;
+            rootLayer.Arrange(new(finalSize));
+            return finalSize;
         }
 
         protected override WpfSize MeasureOverride(WpfSize availableSize)

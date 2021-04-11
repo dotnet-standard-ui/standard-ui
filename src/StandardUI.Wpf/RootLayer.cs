@@ -1,21 +1,15 @@
-﻿using Microsoft.StandardUI.Tree;
-using SkiaSharp.Views.Desktop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-
+﻿using Microsoft.StandardUI.Drawing;
+using Microsoft.StandardUI.Tree;
 using DrawingContext = Microsoft.StandardUI.Drawing.DrawingContext;
+using WpfDrawingContext = System.Windows.Media.DrawingContext;
 using WpfSize = System.Windows.Size;
+using WpfRect = System.Windows.Rect;
 
 namespace Microsoft.StandardUI.Wpf
 {
-    internal class RootLayer : Layer
+    class RootLayer : LayerBase
     {
-        private Node? rootNode;
-        private (WpfSize, WpfSize)? layout;
+        Node? rootNode;
 
         public RootLayer() { }
 
@@ -33,27 +27,25 @@ namespace Microsoft.StandardUI.Wpf
             }
         }
 
-        protected override WpfSize MeasureOverride(WpfSize availableSize) => DoLayout(availableSize);
-
-        protected override WpfSize ArrangeOverride(WpfSize finalSize)
+        public override void InvalidateLayout()
         {
-            if (layout is (WpfSize originalAvailable, WpfSize result) &&
-                (originalAvailable == finalSize || finalSize == result))
-                return result;
-            return DoLayout(finalSize);
+            base.InvalidateLayout();
+            InvalidateMeasure();
         }
 
-        protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
+        protected override WpfSize MeasureCore(WpfSize availableSize)
         {
-            Paint(e, context => rootNode?.Render(context));
-            base.OnPaintSurface(e);
+            var dpiScale = RootNode?.Context.Get<DpiScale>() ?? new DpiScale();
+            TotalTransform = Matrix.Scale(dpiScale.X, dpiScale.Y);
+
+            var (desired, baseline) = rootNode!.Arrange(availableSize.Into());
+            OnArrange((desired, baseline));
+            return desired.Into();
         }
 
-        private WpfSize DoLayout(WpfSize availableSize)
+        protected override void RenderLayer(DrawingContext context)
         {
-            var (desired, _) = rootNode!.Arrange(availableSize.Into());
-            layout = new(availableSize, desired.Into());
-            return layout.Value.Item2;
+            RootNode?.Render(context);
         }
     }
 }

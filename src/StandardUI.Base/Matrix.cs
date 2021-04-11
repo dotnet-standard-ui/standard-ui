@@ -36,6 +36,9 @@ namespace Microsoft.StandardUI
 
         public static Matrix Translate(Point offset) => Translate(offset.X, offset.Y);
 
+        public static Matrix Scale(float scaleX, float scaleY) =>
+            new Matrix(scaleX, 0, 0, scaleY, 0, 0);
+
         public bool Equals(Matrix o) =>
             m11 == o.m11 &&
             m12 == o.m12 &&

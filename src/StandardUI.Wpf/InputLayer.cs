@@ -11,7 +11,7 @@ namespace Microsoft.StandardUI.Wpf
         private InputGroupAutomationPeer? peer;
         private bool focusFromKeyboard = true;
 
-        public InputLayer(Layer parent, InputNode node) : base(parent, node)
+        public InputLayer(InputNode node) : base(node)
         {
             GotFocus += InputLayer_GotFocus;
             LostFocus += InputLayer_LostFocus;
@@ -21,8 +21,6 @@ namespace Microsoft.StandardUI.Wpf
             MouseUp += InputLayer_MouseUp;
             KeyDown += InputLayer_KeyDown;
             KeyUp += InputLayer_KeyUp;
-            FocusVisualStyle = null;
-            IsHitTestVisible = true;
             OnUpdated();
         }
 
@@ -35,7 +33,7 @@ namespace Microsoft.StandardUI.Wpf
 
         protected override AutomationPeer OnCreateAutomationPeer()
         {
-            peer ??= new InputGroupAutomationPeer(this, (InputNode)root!);
+            peer ??= new InputGroupAutomationPeer(this, (InputNode)Node);
             return peer;
         }
 
@@ -75,7 +73,7 @@ namespace Microsoft.StandardUI.Wpf
             {
                 Mouse.Capture(null);
                 var p = e.GetPosition(this);
-                if (new Rect(new Size((float)ActualWidth, (float)ActualHeight)).Contains(p.Into()))
+                if (new Rect(size.Into()).Contains(p.Into()))
                     Input.Tap?.Invoke();
             }
         }
@@ -94,6 +92,6 @@ namespace Microsoft.StandardUI.Wpf
             e.Handled = k.Handled;
         }
 
-        private Input Input => ((InputNode)root!).Element;
+        private Input Input => ((InputNode)Node).Element;
     }
 }
