@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/examples/HelloWorld.Wpf/bin/Debug/net5.0-windows/HelloWorld.Wpf.dll",
+            "program": "${workspaceFolder}/examples/Interop.Wpf/bin/Debug/net5.0-windows/Interop.Wpf.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/examples/HelloWorld.Wpf",
+            "cwd": "${workspaceFolder}/examples/Interop.Wpf",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false
