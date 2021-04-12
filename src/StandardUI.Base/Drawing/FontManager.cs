@@ -61,7 +61,7 @@ namespace Microsoft.StandardUI.Drawing
             }
 
             var blob = builder.Build();
-            return new FormattedText(blob, width / scale.X, metrics.Ascent / scale.Y, metrics.Descent / scale.Y, text, brush.Into());
+            return new FormattedText(blob, width / scale.X, metrics.Ascent / scale.X, metrics.Descent / scale.X, scale.X, text, paint);
         }
 
         class Typeface : ITypeface

@@ -45,12 +45,11 @@ namespace Microsoft.StandardUI.Drawing
             actions.Add(canvas =>
             {
                 var txt = (FormattedText)text;
-                var sx = canvas.TotalMatrix.ScaleX;
-                var sy = canvas.TotalMatrix.ScaleY;
+                var invScale = 1 / txt.Scale;
                 canvas.Save();
                 try
                 {
-                    canvas.Scale(1 / sx, 1 / sy);
+                    canvas.Scale(invScale, invScale);
                     canvas.DrawText(txt.Blob, 0, 0, txt.Paint);
                 }
                 finally
