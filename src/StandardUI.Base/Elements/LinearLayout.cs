@@ -138,7 +138,7 @@ namespace Microsoft.StandardUI.Elements
         {
             Point point = new();
             point[MainAxis] = mainAxisValue;
-            point[CrossAxis] = CrossAxis;
+            point[CrossAxis] = crossAxisValue;
             return point;
         }
 

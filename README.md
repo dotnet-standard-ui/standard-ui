@@ -26,7 +26,7 @@ If you're already using an existing C# UI framework (WinForms, Wpf, Xamarin, Uwp
 
 * Animations
 * Control library
-* Rich text layout
+* Rich text layout (Multiline, mixed styles/fonts, bidi, ect)
 * WinForms/Xamarin/Uwp/WinUI integration
 * HotReload integration (DinoCat is set up for hot reload. Once the tooling catches up this should be easy...)
 * Publish to NuGet
