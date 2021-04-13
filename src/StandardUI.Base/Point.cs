@@ -6,6 +6,8 @@ namespace Microsoft.StandardUI
     [DebuggerDisplay("{X}, {Y}")]
     public struct Point : IEquatable<Point>
     {
+        public static readonly Point CenterDefault = new Point(0.5f, 0.5f);
+
         public Point(float x, float y)
         {
             X = x;
