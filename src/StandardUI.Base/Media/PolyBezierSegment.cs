@@ -1,7 +1,10 @@
-﻿namespace Microsoft.StandardUI.Media
+﻿using System;
+using System.Collections.Generic;
+
+namespace Microsoft.StandardUI.Media
 {
     public class PolyBezierSegment : PathSegment
     {
-        public Points Points { get; init; }
+        public IReadOnlyList<Point> Points { get; init; } = Array.Empty<Point>();
     }
 }
