@@ -1,12 +1,12 @@
 [![CI](https://github.com/dotnet-standard-ui/standard-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/dotnet-standard-ui/standard-ui/actions/workflows/ci.yml)
 
-# 🐱‍🐉 DinoCat
+# 🐱‍🐉 .NET Standard UI (aka DinoCat)
 
-A proof of concept C# UI library. Goals are current highly aspirational. See [Progress](README.md#Progress) for current progress.
+A proof of concept C# UI library. Goals are aspirational. See [Progress](README.md#Progress) for current progress.
 
 ## Beautiful UI Anywhere
 
-Create high quality UI that is consistent and runs with native performance across a wide variety of devices. Write controls that integrate seamlessly with existing C# UI frameworks.
+Create high quality UI that is consistent and runs with native performance across a wide variety of devices. Write controls that integrate seamlessly with existing C# UI frameworks, initially targeting WPF and Cocoa.
 
 ## Easy to Learn and Use
 
