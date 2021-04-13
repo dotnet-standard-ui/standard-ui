@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AppKit;
+using CoreGraphics;
 using Microsoft.StandardUI.Drawing;
 using Microsoft.StandardUI.Elements;
 using Microsoft.StandardUI.Interop;
@@ -11,17 +12,43 @@ namespace Microsoft.StandardUI.Cocoa
 {
     public class NativeCocoa<TNative> : Element where TNative : NSView
     {
-        public NativeCocoa(Func<TNative> create, Action<TNative> update)
+        /// <summary>
+        /// Adapt an arbitrary NSView to StandardUI
+        /// </summary>
+        /// <remarks>Size is computed from the view's intrinsic size</remarks>
+        /// <param name="create">Creates a new instance of the underlying control. Only called once.</param>
+        /// <param name="update">Updates the previously created instance with the current state.</param>
+        public NativeCocoa(Func<TNative> create, Action<TNative> update) : this(create, update, IntrinsicSize)
+        { }
+
+        /// <summary>
+        /// Adapt an arbitrary NSView to StandardUI
+        /// </summary>
+        /// <param name="create">Creates a new instance of the underlying control. Only called once.</param>
+        /// <param name="update">Updates the previously created instance with the current state.</param>
+        /// <param name="computeSize">Compute the desired frame size given the and available size.</param>
+        public NativeCocoa(Func<TNative> create, Action<TNative> update, Func<TNative, Size, CGSize> computeSize)
         {
             Create = create;
             Update = update;
+            ComputeSize = computeSize;
         }
 
         public Func<TNative> Create { get; }
         public Action<TNative> Update { get; }
+        public Func<TNative, Size, CGSize> ComputeSize { get; }
 
         public override Node CreateNode(Node parent, Context context) =>
             new NativeCocoaNode<TNative>(parent, context, this);
+
+        static CGSize IntrinsicSize(TNative view, Size incomming)
+        {
+            var insets = view.AlignmentRectInsets;
+            var cgSize = view.IntrinsicContentSize;
+            cgSize.Width += insets.Left + insets.Right;
+            cgSize.Height += insets.Top + insets.Bottom;
+            return cgSize;
+        }
     }
 
     interface INativeCocoaNode
@@ -64,10 +91,7 @@ namespace Microsoft.StandardUI.Cocoa
 
         protected override (Size, float?) ArrangeOverride(Size availableSize)
         {
-            var insets = view.AlignmentRectInsets;
-            var cgSize = view.IntrinsicContentSize;
-            cgSize.Width += insets.Left + insets.Right;
-            cgSize.Height += insets.Top + insets.Bottom;
+            var cgSize = Element.ComputeSize(view, availableSize);
             view.SetFrameSize(cgSize);
 
             // It's not clear that cocoa baseline is the exact equivalent of StandardUI baseline.
