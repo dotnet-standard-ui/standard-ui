@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using AppKit;
 using CoreGraphics;
 using Foundation;
@@ -39,7 +40,10 @@ namespace Microsoft.StandardUI.Cocoa
                     new TextBlock("Hello!!"),
                     new Row(
                         VerticalAlignment.Center,
-                        new NativeCocoa<NSButton>(() => new() { BezelStyle = NSBezelStyle.Rounded }, btn => btn.Title = "NSButton"),
+                        new Native.NSButton()
+                            .Title("NSButton")
+                            .BezelStyle(NSBezelStyle.Rounded)
+                            .Activated(() => Debug.WriteLine("Hello activation")),
                         new TextBlock("Trailing text")),
                     new TextBlock("zzz")));
             root.RootNodeChanged += Root_RootNodeChanged;

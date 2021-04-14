@@ -56,6 +56,9 @@
     <Reference Include="SkiaSharp.Views.Mac">
       <HintPath>..\..\packages\SkiaSharp.Views.2.80.2\lib\xamarinmac2.0\SkiaSharp.Views.Mac.dll</HintPath>
     </Reference>
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\..\packages\System.Collections.Immutable.5.0.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MyControl.cs" />
@@ -66,6 +69,10 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Layer.cs" />
     <Compile Include="NativeCocoa.cs" />
+    <Compile Include="Native\NSView.cs" />
+    <Compile Include="IsExternalInit.cs" />
+    <Compile Include="Native\NSButton.cs" />
+    <Compile Include="Native\NSControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StandardUI.Base\StandardUI.Base.csproj">
@@ -75,6 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Native\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <Import Project="..\..\packages\SkiaSharp.2.80.2\build\xamarinmac2.0\SkiaSharp.targets" Condition="Exists('..\..\packages\SkiaSharp.2.80.2\build\xamarinmac2.0\SkiaSharp.targets')" />
