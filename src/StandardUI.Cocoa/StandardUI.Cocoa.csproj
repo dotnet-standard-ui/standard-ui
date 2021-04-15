@@ -61,7 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NSStandardUIHost.cs" />
     <Compile Include="LayerBase.cs" />
@@ -69,16 +68,24 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Layer.cs" />
     <Compile Include="NativeCocoa.cs" />
-    <Compile Include="Native\NSView.cs" />
+    <Compile Include="Native\NSViewBase.cs" />
     <Compile Include="IsExternalInit.cs" />
-    <Compile Include="Native\NSButton.cs" />
-    <Compile Include="Native\NSControl.cs" />
     <Compile Include="CocoaToStandardUIAttribute.cs" />
+    <Compile Include="Content.cs" />
+    <Compile Include="Native\NSPopUpButtonBase.cs" />
+    <Compile Include="Native\NSButtonBase.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(DesignTimeBuild)'=='true'">
+    <Compile Include="StandardUI.Cocoa.Generator/StandardUI.Cocoa.Generator.CocoaToStandardUI/*.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StandardUI.Base\StandardUI.Base.csproj">
       <Project>{75A06952-AD20-41F9-87C9-AF970C96C8EA}</Project>
       <Name>StandardUI.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StandardUI.Cocoa.Generator\StandardUI.Cocoa.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false">
+      <Project>{1C132FCE-5B2C-4BD8-90E0-4C25928A155D}</Project>
+      <Name>StandardUI.Cocoa.Generator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

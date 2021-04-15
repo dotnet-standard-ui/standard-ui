@@ -60,6 +60,8 @@ namespace Microsoft.StandardUI.Cocoa
     {
         TNative view;
         NativeLayer layer;
+        Size? previousAvailable;
+        (Size, float?)? arrangeResult;
 
         public NativeCocoaNode(Node parent, Context context, NativeCocoa<TNative> element) : base(parent, context, element)
         {
@@ -85,11 +87,33 @@ namespace Microsoft.StandardUI.Cocoa
             var y = transform.m32 - parentTransform.m32;
 
             var frame = view.Frame;
-            frame.Location = new(0, view.Superview.Frame.Height - frame.Height - y);
+            frame.Location = new(x, view.Superview.Frame.Height - frame.Height - y);
             view.Frame = frame;
         }
 
         protected override (Size, float?) ArrangeOverride(Size availableSize)
+        {
+            if (previousAvailable == availableSize)
+                return arrangeResult.Value;
+
+            var result = ArrangeImpl(availableSize);
+            return result;
+        }
+
+        protected override void UpdateElement(NativeCocoa<TNative> oldElement, Context oldContext)
+        {
+            Element.Update(view);
+            if (previousAvailable is Size availableSize)
+            {
+                // Since the user can supply their own function we need to check if the size
+                // changed each time.
+                var current = arrangeResult;
+                if (ArrangeImpl(availableSize) != current)
+                    Context.InvalidateLayout();
+            }
+        }
+
+        (Size, float?) ArrangeImpl(Size availableSize)
         {
             var cgSize = Element.ComputeSize(view, availableSize);
             view.SetFrameSize(cgSize);
@@ -98,12 +122,12 @@ namespace Microsoft.StandardUI.Cocoa
             var size = view.Frame.Size.Into();
             var baseline = view.BaselineOffsetFromBottom;
             if (baseline == 0)
-                return (size, null);
+                arrangeResult = (size, null);
             else
-                return (size, (float)(cgSize.Height - baseline));
+                arrangeResult = (size, (float)(cgSize.Height - baseline));
+            previousAvailable = availableSize;
+            return arrangeResult.Value;
         }
-
-        protected override void UpdateElement(NativeCocoa<TNative> oldElement, Context oldContext) { }
     }
 
     class NativeLayer : ILayer

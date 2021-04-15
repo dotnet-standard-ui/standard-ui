@@ -710,16 +710,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QXD-R3-AoN" customClass="NSMyControl">
-                                <rect key="frame" x="20" y="154" width="163" height="96"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            </customView>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HQg-ob-KCs" customClass="NSStandardUIHost">
-                                <rect key="frame" x="20" y="-28" width="289" height="174"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </customView>
                         </subviews>
                     </view>
+                    <connections>
+                        <outlet property="host" destination="HQg-ob-KCs" id="PWE-Wy-1Pb"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>

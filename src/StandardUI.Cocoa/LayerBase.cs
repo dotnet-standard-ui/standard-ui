@@ -16,8 +16,8 @@ namespace Microsoft.StandardUI.Cocoa
     {
         Size measuredSize;
         bool layoutValid = false;
-        List<Action<SKCanvas>> render;
         List<NSView> renderOrder;
+        Content content;
 
         public LayerBase()
         {
@@ -35,7 +35,7 @@ namespace Microsoft.StandardUI.Cocoa
         public override void DrawRect(CGRect dirtyRect)
         {
             var scaleFactor = Window.BackingScaleFactor;
-            render = new();
+            List<Action<SKCanvas>> render = new();
             DrawingContext childContext = new(render);
             renderOrder = new();
             childContext.Push(Matrix.Scale((float)scaleFactor, (float)scaleFactor));
@@ -44,6 +44,8 @@ namespace Microsoft.StandardUI.Cocoa
             var viewToIndex = renderOrder
                 .Select((view, idx) => (view, idx))
                 .ToDictionary(item => item.Item1, item => item.Item2);
+            if (content != null)
+                viewToIndex[content] = -1;
             var totalViews = viewToIndex.Count;
             SortSubviews((a, b) =>
             {
@@ -62,20 +64,25 @@ namespace Microsoft.StandardUI.Cocoa
 
             if (childContext.IsVisible)
             {
-                if (!WantsLayer)
+                if (content == null)
                 {
-                    SKGLLayer glLayer = new();
-                    glLayer.ContentsScale = scaleFactor;
-                    glLayer.Opaque = false;
-                    glLayer.PaintSurface += Layer_PaintSurface;
-                    Layer = glLayer;
-                    WantsLayer = true;
+                    content = new();
+                    AddSubview(content, NSWindowOrderingMode.Below, null);
                 }
-
-                Layer.SetNeedsDisplay();
             }
-            else if (WantsLayer)
-                Layer.SetNeedsDisplay();
+
+            if (content != null)
+            {
+                content.ContentsScale = scaleFactor;
+                content.Render = render;
+                content.Frame = Bounds;
+                content.Layer.SetNeedsDisplay();
+            }
+        }
+
+        public override void UpdateLayer()
+        {
+            throw new NotImplementedException();
         }
 
         protected abstract void Render(DrawingContext context);
@@ -110,7 +117,7 @@ namespace Microsoft.StandardUI.Cocoa
             throw new NotImplementedException();
         }
 
-        public void InvalidateLayout()
+        public virtual void InvalidateLayout()
         {
             if (!layoutValid)
                 return;
@@ -142,19 +149,6 @@ namespace Microsoft.StandardUI.Cocoa
             var offsetY = TotalTransform.m32 - parentTransform.m32;
             Frame = new(offsetX, offsetY, measuredSize.Width, measuredSize.Height);
             NeedsToDraw(Bounds);
-        }
-
-        void Layer_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
-        {
-            if (render == null)
-                return;
-
-            var canvas = e.Surface.Canvas;
-            canvas.Clear();
-            foreach (var action in render)
-                action(canvas);
-
-            render = null;
         }
 
         public void OnUpdated() { }

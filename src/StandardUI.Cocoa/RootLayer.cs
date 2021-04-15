@@ -10,6 +10,7 @@ namespace Microsoft.StandardUI.Cocoa
 
         public RootLayer()
         {
+            NeedsLayout = true;
         }
 
         public Node Root { get; set; }
@@ -20,8 +21,6 @@ namespace Microsoft.StandardUI.Cocoa
             {
                 if (!intrinsicSize.HasValue)
                 {
-                    NeedsLayout = true;
-                    NeedsDisplay = true;
                     (intrinsicSize, _) = Root.Arrange(new());
                 }
                 return intrinsicSize.Value.Into();
@@ -38,6 +37,15 @@ namespace Microsoft.StandardUI.Cocoa
         {
             Root.Arrange(Bounds.Size.Into());
             base.Layout();
+        }
+
+        public override void InvalidateLayout()
+        {
+            base.InvalidateLayout();
+            NeedsLayout = true;
+            InvalidateIntrinsicContentSize();
+            Superview.InvalidateIntrinsicContentSize();
+            InvalidateRender();
         }
     }
 }

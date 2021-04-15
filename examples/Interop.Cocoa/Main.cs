@@ -7,8 +7,6 @@ namespace Interop.Cocoa
     {
         static void Main(string[] args)
         {
-            NSStandardUIHost.Reference();
-            NSMyControl.Reference();
             NSApplication.Init();
             NSApplication.Main(args);
         }

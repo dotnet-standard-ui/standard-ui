@@ -106,6 +106,10 @@
       <Project>{59A17592-3CB7-4C2F-A1D2-1468BAB720C1}</Project>
       <Name>StandardUI.Cocoa</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\StandardUI.Base\StandardUI.Base.csproj">
+      <Project>{75A06952-AD20-41F9-87C9-AF970C96C8EA}</Project>
+      <Name>StandardUI.Base</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <Import Project="..\..\packages\HarfBuzzSharp.2.6.1.7\build\xamarinmac2.0\HarfBuzzSharp.targets" Condition="Exists('..\..\packages\HarfBuzzSharp.2.6.1.7\build\xamarinmac2.0\HarfBuzzSharp.targets')" />

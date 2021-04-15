@@ -35,17 +35,7 @@ namespace Microsoft.StandardUI.Cocoa
             rootLayer = new();
             rootLayer.Frame = Bounds;
             AddSubview(rootLayer);
-            root = new(CreateContext(), () =>
-                new Column(
-                    new TextBlock("Hello!!"),
-                    new Row(
-                        VerticalAlignment.Center,
-                        new Native.NSButton()
-                            .Title("NSButton")
-                            .BezelStyle(NSBezelStyle.Rounded)
-                            .Activated(() => Debug.WriteLine("Hello activation")),
-                        new TextBlock("Trailing text")),
-                    new TextBlock("zzz")));
+            root = new(CreateContext(), () => new Dummy());
             root.RootNodeChanged += Root_RootNodeChanged;
             rootLayer.Root = root.RootNode;
         }

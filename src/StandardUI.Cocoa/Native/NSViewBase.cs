@@ -5,76 +5,50 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using CoreGraphics;
 using Microsoft.StandardUI.Cocoa.Native.Internal;
 using Microsoft.StandardUI.Elements;
 using Microsoft.StandardUI.Tree;
 
 namespace Microsoft.StandardUI.Cocoa.Native
 {
-    public abstract partial class NSView<TSubclass, TView> : UnsafeControl<Internal.ViewState> where TView : AppKit.NSView, new()
+    public abstract partial class NSViewBase<TSubclass, TView> : UnsafeControl<Internal.ViewState> where TView : AppKit.NSView, new()
     {
-        public NSView()
-        {
-            PropertyValues = ImmutableDictionary<PropertyInfo, ValueInfo>.Empty;
-            Events = ImmutableDictionary<EventInfo, (IListenerFactory, object)>.Empty;
-            Gestures = ImmutableList<(AppKit.NSGestureRecognizer, object)>.Empty;
-        }
-
-        public NSView(
-            ImmutableDictionary<PropertyInfo, ValueInfo> propertyValues,
-            ImmutableDictionary<EventInfo, (IListenerFactory, object)> events,
-            ImmutableList<(AppKit.NSGestureRecognizer, object)> gestures)
-        {
-            PropertyValues = propertyValues;
-            Events = events;
-            Gestures = gestures;
-        }
-
-        public ImmutableDictionary<PropertyInfo, ValueInfo> PropertyValues { get; }
-        public ImmutableDictionary<EventInfo, (IListenerFactory, object)> Events { get; }
-        public ImmutableList<(AppKit.NSGestureRecognizer, object)> Gestures { get; }
+        protected readonly ImmutableDictionary<IUIProperty, object> propertyValues = ImmutableDictionary<IUIProperty, object>.Empty;
+        protected readonly ImmutableDictionary<EventInfo, (IListenerFactory, object)> events = ImmutableDictionary<EventInfo, (IListenerFactory, object)>.Empty;
+        protected readonly ImmutableList<(AppKit.NSGestureRecognizer, object)> gestures = ImmutableList<(AppKit.NSGestureRecognizer, object)>.Empty;
+        protected readonly Size size = new(float.NaN, float.NaN);
 
         public TSubclass AddGesture(AppKit.NSGestureRecognizer gesture, object key = null)
         {
-            var gestures = Gestures.Add((gesture, key));
-            return WithGestures(gestures);
+            var gestures = this.gestures.Add((gesture, key));
+            return With_gestures(gestures);
         }
 
         public TSubclass On<TEventHandler, TArgs>(ListenerFactory<TEventHandler, TArgs> targetEvent, Action<object, TArgs> callback)
         {
-            var events = Events.Add(targetEvent.EventInfo, (targetEvent, callback));
-            return WithEvents(events);
+            var events = this.events.Add(targetEvent.EventInfo, (targetEvent, callback));
+            return With_events(events);
         }
 
-        public TSubclass Set(string propertyName, object value) =>
-            Set(propertyName, new ValueInfo(value));
-
-        public TSubclass Set(string propertyName, object value, object defaultValue) =>
-            Set(propertyName, new ValueInfo(value, defaultValue));
-
-        public TSubclass Set(string propertyName, ValueInfo value)
+        public TSubclass Set(IUIProperty property, object value)
         {
-            var property = typeof(TSubclass).GetProperty(propertyName);
-            return Set(property, value);
+            var propertyValues = this.propertyValues.SetItem(property, value);
+            return With_propertyValues(propertyValues);
         }
 
-        public TSubclass Set(PropertyInfo property, object value) =>
-            Set(property, new ValueInfo(value));
+        public TSubclass Width(float width) =>
+            With_size(new(width, size.Height));
 
-        public TSubclass Set(PropertyInfo property, object value, object defaultValue) =>
-            Set(property, new ValueInfo(value, defaultValue));
-
-        public TSubclass Set(PropertyInfo property, ValueInfo value)
-        {
-            var propertyValues = PropertyValues.SetItem(property, value);
-            return WithProperties(propertyValues);
-        }
+        public TSubclass Height(float height) =>
+            With_size(new(size.Width, height));
 
         public override Element Build(Context context, Internal.ViewState state)
         {
             return new NativeCocoa<TView>(
                 () => new(),
-                view => Update(view, state));
+                view => Update(view, state),
+                ComputeSize);
         }
 
         public override Node CreateNode(Node parent, Context context)
@@ -82,24 +56,20 @@ namespace Microsoft.StandardUI.Cocoa.Native
             return base.CreateNode(parent, context);
         }
 
-        protected abstract TSubclass WithEvents(ImmutableDictionary<EventInfo, (IListenerFactory, object)> events);
-        protected abstract TSubclass WithGestures(ImmutableList<(AppKit.NSGestureRecognizer, object)> gestures);
-        protected abstract TSubclass WithProperties(ImmutableDictionary<PropertyInfo, ValueInfo> propertyValues);
-
-        void Update(TView view, Internal.ViewState state)
+        protected virtual void Update(TView view, Internal.ViewState state)
         {
             if (state.Restore == null)
             {
                 // First time. No diff.
-                Dictionary<PropertyInfo, object> restore = new();
-                foreach (var (property, value) in PropertyValues)
+                Dictionary<IUIProperty, object> restore = new();
+                foreach (var (property, value) in propertyValues)
                 {
-                    restore[property] = value.GetDefault(view, property);
-                    property.SetValue(view, value.Value);
+                    restore[property] = property.GetDefault(view);
+                    property.Set(view, value);
                 }
 
                 Dictionary<object, AppKit.NSGestureRecognizer> knownGestures = new();
-                foreach (var (gesture, key) in Gestures)
+                foreach (var (gesture, key) in gestures)
                 {
                     view.AddGestureRecognizer(gesture);
                     if (key != null)
@@ -107,7 +77,7 @@ namespace Microsoft.StandardUI.Cocoa.Native
                 }
 
                 Dictionary<EventInfo, (IEventListener, object)> events = new();
-                foreach (var (eventInfo, rest) in Events)
+                foreach (var (eventInfo, rest) in this.events)
                 {
                     var (factory, callback) = rest;
                     var listener = factory.Add(state, view);
@@ -121,32 +91,23 @@ namespace Microsoft.StandardUI.Cocoa.Native
             else
             {
                 // Restore properties that are no longer set
-                foreach (var (propertyInfo, defaultValue) in state.Restore)
+                foreach (var (property, defaultValue) in state.Restore)
                 {
-                    if (!PropertyValues.ContainsKey(propertyInfo))
-                        propertyInfo.SetValue(view, defaultValue);
+                    if (!propertyValues.ContainsKey(property))
+                        property.Set(view, defaultValue);
                 }
 
                 // Set/update new or changed properties
-                Dictionary<PropertyInfo, object> restore = new();
-                foreach (var (property, value) in PropertyValues)
+                Dictionary<IUIProperty, object> restore = new();
+                foreach (var (property, value) in propertyValues)
                 {
-                    // TODO No support for set only values consideration for values that get regenerated on every get.
-                    // Consider option to disable the "Equals" check. We could be duplicating some work here.
-                    var currentValue = property.GetValue(view);
-                    if (!Equals(currentValue, value))
-                    {
-                        if (!state.Restore.TryGetValue(property, out var defaultValue))
-                            defaultValue = value.GetDefault(view, property);
-                        restore[property] = defaultValue;
-                        property.SetValue(view, value.Value);
-                    }
+                    property.Update(view, value, state.Restore, restore);
                 }
 
                 // Add new gestures. Only track gestures with a non-null key. Gestures with a null key are assumed
                 // to only be set once.
                 Dictionary<object, AppKit.NSGestureRecognizer> knownGestures = new();
-                foreach (var (gesture, key) in Gestures)
+                foreach (var (gesture, key) in gestures)
                 {
                     if (key == null)
                         continue;
@@ -176,7 +137,7 @@ namespace Microsoft.StandardUI.Cocoa.Native
                 // 1. No invoking callbacks twice
                 // 2. No "gap" in coverage when updating events
                 Dictionary<EventInfo, (IEventListener, object)> events = new();
-                foreach (var (eventInfo, rest) in Events)
+                foreach (var (eventInfo, rest) in this.events)
                 {
                     var (factory, callback) = rest;
                     if (state.EventTriggers.TryGetValue(eventInfo, out var existing))
@@ -205,10 +166,114 @@ namespace Microsoft.StandardUI.Cocoa.Native
                 state.EventTriggers = events;
             }
         }
+
+        static CGSize IntrinsicSize(TView view)
+        {
+            var size = view.IntrinsicContentSize;
+            var insets = view.AlignmentRectInsets;
+            size.Width += insets.Left + insets.Right;
+            size.Height += insets.Top + insets.Bottom;
+            return size;
+        }
+
+        CGSize ComputeSize(TView view, Size availableSize)
+        {
+            double width;
+            double height;
+            CGSize? intrinsicSize = null;
+            if (float.IsNaN(size.Width))
+            {
+                intrinsicSize = IntrinsicSize(view);
+                width = intrinsicSize.Value.Width;
+            }
+            else if (float.IsInfinity(size.Width))
+                width = availableSize.Width;
+            else
+                width = size.Width;
+
+            if (float.IsNaN(size.Height))
+            {
+                intrinsicSize ??= IntrinsicSize(view);
+                height = intrinsicSize.Value.Height;
+            }
+            else if (float.IsInfinity(size.Height))
+                height = availableSize.Height;
+            else
+                height = size.Height;
+            return new(width, height);
+        }
     }
 
     namespace Internal
     {
+        public interface IUIProperty
+        {
+            object GetDefault(object instance);
+            void Set(object instance, object value);
+            void Update(object instance, object value, Dictionary<IUIProperty, object> previousDefault, Dictionary<IUIProperty, object> nextDefault);
+        }
+
+        public class UIProperty : IUIProperty
+        {
+            private PropertyInfo property;
+
+            public UIProperty(PropertyInfo propertyInfo) => this.property = propertyInfo;
+
+            public object GetDefault(object instance) =>
+                property.GetValue(instance);
+
+            public void Set(object instance, object value) =>
+                property.SetValue(instance, value);
+
+            public void Update(object instance, object value,
+                Dictionary<IUIProperty, object> previousDefault,
+                Dictionary<IUIProperty, object> nextDefault)
+            {
+                // TODO No support for set only values consideration for values that get regenerated on every get.
+                // Consider option to disable the "Equals" check. We could be duplicating some work here. It would
+                // also make the implementation significantly simpler
+                var currentValue = property.GetValue(instance);
+                if (!Equals(currentValue, value))
+                {
+                    if (!previousDefault.TryGetValue(this, out var defaultValue))
+                        defaultValue = GetDefault(instance);
+                    nextDefault[this] = defaultValue;
+                    Set(instance, value);
+                }
+            }
+
+            public override int GetHashCode() => property.GetHashCode();
+
+            public override bool Equals(object obj) =>
+                obj is UIProperty uip && uip.property.Equals(property);
+        }
+
+        public class CustomUIProperty<TView, T> : IUIProperty
+        {
+            private T defaultValue;
+            private Action<TView, T> setValue;
+
+            public CustomUIProperty(T defaultValue, Action<TView, T> setValue)
+            {
+                this.defaultValue = defaultValue;
+                this.setValue = setValue;
+            }
+
+            public object GetDefault(object instance) =>
+                defaultValue;
+
+            public void Set(object instance, object value) =>
+                setValue((TView)instance, (T)value);
+
+            public void Update(object instance, object value,
+                Dictionary<IUIProperty, object> previousDefault,
+                Dictionary<IUIProperty, object> nextDefault)
+            {
+                nextDefault[this] = defaultValue;
+                Set(instance, value);
+            }
+        }
+
         public struct ValueInfo
         {
             public ValueInfo(object value)
@@ -216,6 +281,7 @@ namespace Microsoft.StandardUI.Cocoa.Native
                 IsDefaultKnown = false;
                 Default = null;
                 Value = value;
+                SetValue = DefaultSet;
             }
 
             public ValueInfo(object value, object defaultValue)
@@ -223,11 +289,21 @@ namespace Microsoft.StandardUI.Cocoa.Native
                 IsDefaultKnown = true;
                 Default = defaultValue;
                 Value = value;
+                SetValue = DefaultSet;
+            }
+
+            public ValueInfo(object value, object defaultValue, Action<object, PropertyInfo, object> setOverride)
+            {
+                IsDefaultKnown = true;
+                Default = defaultValue;
+                Value = value;
+                SetValue = setOverride;
             }
 
             public bool IsDefaultKnown;
             public object Default;
             public object Value;
+            public Action<object, PropertyInfo, object> SetValue;
 
             public object GetDefault(object view, PropertyInfo property)
             {
@@ -240,6 +316,9 @@ namespace Microsoft.StandardUI.Cocoa.Native
                     defaultValue = Activator.CreateInstance(property.PropertyType);
                 return defaultValue;
             }
+
+            static void DefaultSet(object obj, PropertyInfo prop, object value) =>
+                prop.SetValue(obj, value);
         }
 
         public class ViewState : INotifyPropertyChanged
@@ -250,7 +329,7 @@ namespace Microsoft.StandardUI.Cocoa.Native
                 remove { }
             }
 
-            public Dictionary<PropertyInfo, object> Restore;
+            public Dictionary<IUIProperty, object> Restore;
             public Dictionary<object, AppKit.NSGestureRecognizer> KnownGestures;
 
             /// <summary>
@@ -278,6 +357,7 @@ namespace Microsoft.StandardUI.Cocoa.Native
         {
             public ListenerFactory(EventInfo eventInfo)
             {
+                Debug.Assert(eventInfo != null, "EventInfo must be non-null");
                 Debug.Assert(eventInfo.EventHandlerType == typeof(TEventHandler),
                     $"Listener factory should be declared with {eventInfo.EventHandlerType.Name}");
                 EventInfo = eventInfo;
