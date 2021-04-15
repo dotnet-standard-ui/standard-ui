@@ -13,6 +13,13 @@ namespace Microsoft.StandardUI.Cocoa.Native
 {
     public abstract partial class NSView<TSubclass, TView> : UnsafeControl<Internal.ViewState> where TView : AppKit.NSView, new()
     {
+        public NSView()
+        {
+            PropertyValues = ImmutableDictionary<PropertyInfo, ValueInfo>.Empty;
+            Events = ImmutableDictionary<EventInfo, (IListenerFactory, object)>.Empty;
+            Gestures = ImmutableList<(AppKit.NSGestureRecognizer, object)>.Empty;
+        }
+
         public NSView(
             ImmutableDictionary<PropertyInfo, ValueInfo> propertyValues,
             ImmutableDictionary<EventInfo, (IListenerFactory, object)> events,

@@ -73,6 +73,7 @@
     <Compile Include="IsExternalInit.cs" />
     <Compile Include="Native\NSButton.cs" />
     <Compile Include="Native\NSControl.cs" />
+    <Compile Include="CocoaToStandardUIAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StandardUI.Base\StandardUI.Base.csproj">
