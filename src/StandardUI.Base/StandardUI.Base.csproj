@@ -8,6 +8,13 @@
   </PropertyGroup>
 
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="SkiaSharp.HarfBuzz" Version="2.80.2" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" Condition="'$(TargetFramework)'=='netstandard2.0'" />
