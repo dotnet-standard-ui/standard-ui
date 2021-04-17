@@ -9,13 +9,13 @@ namespace Microsoft.StandardUI.State
     {
         public static InjectState<State<T>> Inject<T>(Func<T, Action<T>, Element> callback) where T : new() =>
             new InjectState<State<T>>(() => new(), state => callback(state.Value, newState => state.Value = newState));
-        public static InjectState<State<T>> Inject<T>(Func<T> newState, Func<T, Action<T>, Element> callback) =>
-            new InjectState<State<T>>(() => new State<T>(newState()),
+        public static InjectState<State<T>> Inject<T>(Func<T> newValue, Func<T, Action<T>, Element> callback) =>
+            new InjectState<State<T>>(() => new State<T>(newValue()),
                 state => callback(state.Value, newState => state.Value = newState));
-        public static UnsafeInjectState<T> UnsafeInject<T>(Func<T, Element> callback) where T : new() =>
-            new UnsafeInjectState<T>(() => new(), callback);
-        public static UnsafeInjectState<T> UnsafeInject<T>(Func<T> newState, Func<T, Element> callback) =>
-            new UnsafeInjectState<T>(() => new State<T>(newState()), callback);
+        public static UnsafeInjectState<State<T>> UnsafeInject<T>(Func<State<T>, Element> callback) where T : new() =>
+            new UnsafeInjectState<State<T>>(() => new(), callback);
+        public static UnsafeInjectState<State<T>> UnsafeInject<T>(Func<T> newValue, Func<State<T>, Element> callback) =>
+            new UnsafeInjectState<State<T>>(() => new State<T>(newValue()), callback);
     }
 
     public sealed class State<T> : INotifyPropertyChanged, IDisposable
