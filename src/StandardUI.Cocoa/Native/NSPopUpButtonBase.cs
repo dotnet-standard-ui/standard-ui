@@ -6,6 +6,12 @@ namespace Microsoft.StandardUI.Cocoa.Native
 {
     public abstract partial class NSPopUpButtonBase<TSubclass, TView>
     {
+        public static CustomUIProperty<AppKit.NSPopUpButton, int> IndexOfSelectedItemProperty =
+            new(0, (view, value) => view.SelectItem(value));
+
+        public TSubclass IndexOfSelectedItem(int index) =>
+            Set(IndexOfSelectedItemProperty, index);
+
         static ConditionalWeakTable<Internal.ViewState, string[]> previousItems = new();
         protected readonly string[] items;
 

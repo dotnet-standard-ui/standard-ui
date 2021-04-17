@@ -1,17 +1,13 @@
-﻿using Microsoft.StandardUI.Drawing;
-using Microsoft.StandardUI.Tree;
+﻿using Microsoft.StandardUI.Tree;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.StandardUI.Elements
 {
-    public class InjectState<TState> : Element where TState: INotifyPropertyChanged
+    public abstract class InjectStateBase<TState> : Element
     {
-        public InjectState(Func<TState> newState, Func<TState, Element> callback)
+        public InjectStateBase(Func<TState> newState, Func<TState, Element> callback)
         {
             NewState = newState;
             Callback = callback;
@@ -20,32 +16,43 @@ namespace Microsoft.StandardUI.Elements
         public Func<TState> NewState { get; }
         public Func<TState, Element> Callback { get; }
 
-        public virtual bool Safe { get; } = true;
+        public abstract void AddListener(TState state, PropertyChangedEventHandler handler);
+        public abstract void RemoveListener(TState state, PropertyChangedEventHandler handler);
 
         public override Node CreateNode(Node? parent, Context context) =>
             new InjectStateNode<TState>(parent, context, this);
     }
 
-    public class UnsafeInjectState<TState> : InjectState<TState> where TState : INotifyPropertyChanged
+    public class InjectState<TState> : InjectStateBase<TState> where TState : INotifyPropertyChanged
+    {
+        public InjectState(Func<TState> newState, Func<TState, Element> callback) : base(newState, callback)
+        { }
+
+        public override void AddListener(TState state, PropertyChangedEventHandler handler) =>
+            state.PropertyChanged += handler;
+
+        public override void RemoveListener(TState state, PropertyChangedEventHandler handler) =>
+            state.PropertyChanged -= handler;
+    }
+
+    public class UnsafeInjectState<TState> : InjectStateBase<TState>
     {
         public UnsafeInjectState(Func<TState> newState, Func<TState, Element> callback) : base(newState, callback)
         { }
 
-        public override bool Safe { get; } = false;
+        public override void AddListener(TState state, PropertyChangedEventHandler handler) { }
+        public override void RemoveListener(TState state, PropertyChangedEventHandler handler) { }
     }
 
-    internal class InjectStateNode<TState> : NodeBase<InjectState<TState>> where TState: INotifyPropertyChanged
+    class InjectStateNode<TState> : NodeBase<InjectStateBase<TState>>
     {
-        private TState state;
-        private Node child;
+        TState state;
+        Node child;
 
-
-        public InjectStateNode(Node? parent, Context context, InjectState<TState> element) : base(parent, context, element)
+        public InjectStateNode(Node? parent, Context context, InjectStateBase<TState> element) : base(parent, context, element)
         {
             state = element.NewState();
-
-            if (element.Safe)
-                state.PropertyChanged += State_PropertyChanged;
+            element.AddListener(state, State_PropertyChanged);
 
             var childElement = element.Callback(state);
             child = childElement.CreateNode(this, context);
@@ -61,15 +68,22 @@ namespace Microsoft.StandardUI.Elements
 
         protected override (Size, float?) ArrangeOverride(Size availableSize) => child.Arrange(availableSize);
 
-        protected override void UpdateElement(InjectState<TState> oldElement, Context oldContext) => UpdateState();
+        public override void Dispose()
+        {
+            Element.RemoveListener(state, State_PropertyChanged);
+            (state as IDisposable)?.Dispose();
+            base.Dispose();
+        }
 
-        private void UpdateState()
+        protected override void UpdateElement(InjectStateBase<TState> oldElement, Context oldContext) => UpdateState();
+
+        void UpdateState()
         {
             var newChild = Element.Callback(state);
             child = child.UpdateElement(newChild, Context);
         }
 
-        private void State_PropertyChanged(object? sender, EventArgs e) =>
+        void State_PropertyChanged(object? sender, EventArgs e) =>
             Context.InvalidateState(Depth, UpdateState);
     }
 }
