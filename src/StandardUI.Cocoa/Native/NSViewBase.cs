@@ -176,7 +176,7 @@ namespace Microsoft.StandardUI.Cocoa.Native
             return size;
         }
 
-        CGSize ComputeSize(TView view, Size availableSize)
+        (CGSize, float?) ComputeSize(TView view, Size availableSize)
         {
             double width;
             double height;
@@ -191,16 +191,18 @@ namespace Microsoft.StandardUI.Cocoa.Native
             else
                 width = size.Width;
 
+            float? baseline = null;
             if (float.IsNaN(size.Height))
             {
                 intrinsicSize ??= IntrinsicSize(view);
                 height = intrinsicSize.Value.Height;
+                baseline = (float)(height - (view.AlignmentRectInsets.Bottom + view.BaselineOffsetFromBottom));
             }
             else if (float.IsInfinity(size.Height))
                 height = availableSize.Height;
             else
                 height = size.Height;
-            return new(width, height);
+            return (new(width, height), baseline);
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using AppKit;
 using Foundation;
+using Microsoft.StandardUI.Cocoa;
 
 namespace Interop.Cocoa
 {
@@ -8,6 +9,12 @@ namespace Interop.Cocoa
     {
         public AppDelegate()
         {
+            // By updating the GlobalContext you can change fonts/colors/ect for all content
+            // inside NSStandardUIHost.
+            NSStandardUIHost.SetGlobalContext(new()
+            {
+                { typeof(Style), new Style(HeaderFont: NSFont.BoldSystemFontOfSize(13)) }
+            });
         }
 
         public override void DidFinishLaunching(NSNotification notification)

@@ -28,16 +28,19 @@ namespace Interop.Cocoa
     {
         // README: Close/reopen solution after building the first time. Workaround until VSMac has source generator support.
         // Testing layout here. A real implementation would have to bind to/update a real view model.
-        public override Element Build(Context context) =>
-            new Column(
+        public override Element Build(Context context)
+        {
+            var style = context.Get<Style>();
+            return new Column(
                 new Row(
-                    VerticalAlignment.Center,
+                    VerticalAlignment.Baseline,
                     TextBlock("Configuration:"),
                     Combobox(Data.Configurations, Data.SelectedConfiguration),
                     TextBlock("Platform:"),
                     Combobox(Data.Platforms, Data.SelectedPlatform)
-                    ),
-                TextBlock("General Options"),
+                    ).Margin(0, 10, 0, 10),
+                TextBlock("General Options")
+                    .Font(style.HeaderFont),
                 new Column(
                     Checkbox("Generate overflow checks", Data.GenerateOverflowChecks),
                     Checkbox("Enable optimizations", Data.EnableOptimizations),
@@ -45,7 +48,7 @@ namespace Interop.Cocoa
                     // By Binding to GenerateXmlDoc we can update Enabled if the checkbox is checked.
                     Data.GenerateXmlDoc.Bind(() =>
                         new Row(
-                            VerticalAlignment.Center,
+                            VerticalAlignment.Baseline,
                             Checkbox("Generate xml documentation:", Data.GenerateXmlDoc),
                             TextEdit(Data.XmlDocPath)
                                 .Enabled(Data.GenerateXmlDoc)
@@ -58,16 +61,17 @@ namespace Interop.Cocoa
                             )
                         ),
                     new Row(
-                        VerticalAlignment.Center,
+                        VerticalAlignment.Baseline,
                         TextBlock("Define Symbols:"),
                         TextEdit(Data.Symbols)
                             .Width(float.PositiveInfinity)
+                            .Margin(0, 0, 6, 6)
                         ),
                     new Row(
-                        VerticalAlignment.Center,
+                        VerticalAlignment.Baseline,
                         TextBlock("Platform targets:"),
                         Combobox(Data.PlatformTargets, Data.SelectedPlatformTarget)
-                        ).Margin(10),
+                        ),
                     new Row(
                         new Native.NSButton()
                             .Title("Cancel")
@@ -79,10 +83,9 @@ namespace Interop.Cocoa
                             .KeyEquivalent("\r")
                             .Activated(Ok)
                         ).Right()
-                )
+                ).Margin(15, 10)
             );
-
-        
+        }
 
         static Native.NSTextField TextBlock(string text) =>
             new Native.NSTextField()
