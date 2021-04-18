@@ -17,11 +17,11 @@ namespace Microsoft.StandardUI
 
         public Color(uint value) => color = value;
         public Color(byte red, byte green, byte blue, byte alpha = 255) =>
-            color = (uint)(alpha << 24 | red << 16 | green << 8 | blue);
+            color = (uint) ((alpha << 24) | (red << 16) | (green << 8) | blue);
 
-        public byte Alpha => (byte)(color >> 24 & 0xFF);
-        public byte Red => (byte)(color >> 16 & 0xFF);
-        public byte Green => (byte)(color >> 8 & 0xFF);
+        public byte Alpha => (byte)((color >> 24) & 0xFF);
+        public byte Red => (byte)((color >> 16) & 0xFF);
+        public byte Green => (byte)((color >> 8) & 0xFF);
         public byte Blue => (byte)(color & 0xFF);
 
         public static implicit operator Color(uint color) => new Color(color);
