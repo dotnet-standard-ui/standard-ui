@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.StandardUI.Media
 {
-    public class PathSegment
+    public abstract class PathSegment
     {
     }
 }

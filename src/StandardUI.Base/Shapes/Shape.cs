@@ -1,9 +1,11 @@
-﻿using Microsoft.StandardUI.Media;
+﻿using Microsoft.StandardUI.Elements;
+using Microsoft.StandardUI.Media;
+using System;
 
 namespace Microsoft.StandardUI.Shapes
 {
     // TODO: Add superclass
-    public class Shape // : IUIElement
+    public abstract class Shape<Self> : DrawingElement<Self> where Self : Shape<Self>
     {
         /// <summary>
         /// A Brush that paints/fills the shape interior. The default is null (a null brush) which is evaluated as Transparent for rendering.
@@ -34,5 +36,26 @@ namespace Microsoft.StandardUI.Shapes
         /// A value of the PenLineJoin enumeration that specifies the join appearance. The default value is Miter.
         /// </summary>
         public PenLineJoin StrokeLineJoin { get; init; } = PenLineJoin.Miter;
+
+        public virtual Size NaturalSize => throw new NotImplementedException();
+
+        public override Size Arrange(Size availableSize)
+        {
+            Size naturalSize = NaturalSize;
+            return new Size(
+                !float.IsNaN(naturalSize.Width) ? naturalSize.Width : availableSize.Width,
+                !float.IsNaN(naturalSize.Height) ? naturalSize.Height : availableSize.Height);
+        }
+
+        protected override bool IsArrangeValid(Self oldElement) =>
+            NaturalSize == oldElement.NaturalSize;
+
+        protected override bool IsRenderValid(Self oldElement) =>
+            oldElement.Fill == Fill &&
+            oldElement.Stroke == Stroke &&
+            oldElement.StrokeThickness == StrokeThickness &&
+            oldElement.StrokeMiterLimit == StrokeMiterLimit &&
+            oldElement.StrokeLineCap == StrokeLineCap &&
+            oldElement.StrokeLineJoin == StrokeLineJoin;
     }
 }

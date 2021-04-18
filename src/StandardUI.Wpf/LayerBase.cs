@@ -25,7 +25,7 @@ namespace Microsoft.StandardUI.Wpf
         List<UIElement> renderedChildren = new List<UIElement>();
         protected WpfSize size;
         SKElement? element;
-        List<Action<SKCanvas>>? renderCache;
+        SKPicture? renderCache;
 
         public LayerBase()
         {
@@ -103,8 +103,7 @@ namespace Microsoft.StandardUI.Wpf
 
             var canvas = args.Surface.Canvas;
             canvas.Clear();
-            foreach (var action in renderCache)
-                action(canvas);
+            canvas.DrawPicture(renderCache, 0, 0);
             renderCache = null;
         }
 
@@ -114,10 +113,16 @@ namespace Microsoft.StandardUI.Wpf
             var dpix = (float)source.CompositionTarget.TransformToDevice.M11;
             var dpiy = (float)source.CompositionTarget.TransformToDevice.M22;
 
-            renderCache = new();
-            DrawingContext context = new(renderCache);
+            var skPictureRecorder = new SKPictureRecorder();
+
+            // TODO: Can we restrict the culling rect here?
+            SKRect skCullingRect = SKRect.Create(float.MinValue, float.MinValue, float.MaxValue, float.MaxValue);
+            SKCanvas canvas = skPictureRecorder.BeginRecording(skCullingRect);
+
+            DrawingContext context = new DrawingContext(canvas);
             context.Push(Matrix.Scale(dpix, dpiy));
             RenderLayer(context);
+            renderCache = skPictureRecorder.EndRecording();
 
             if (context.IsVisible)
             {
