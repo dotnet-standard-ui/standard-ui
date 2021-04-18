@@ -36,12 +36,12 @@ namespace Microsoft.StandardUI.Elements
         public static Margin Margin(this Element e, float left, float top) =>
             new Margin(e, new(left, top));
         public static Margin Margin(this Element e, float left, float top, float right, float bottom) =>
-            new Margin(e, new(left, right, top, bottom));
+            new Margin(e, new(left, top, right, bottom));
         public static Margin Margin(this Element e, Thickness margin) =>
             new Margin(e, margin);
     }
 
-    internal class MarginNode : NodeBase<Margin>
+    class MarginNode : NodeBase<Margin>
     {
         Node child;
 

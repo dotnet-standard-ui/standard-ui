@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="IsExternalInit.cs" />
     <Compile Include="OptionsPane.cs" />
+    <Compile Include="Style.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />

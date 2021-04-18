@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using AppKit;
 using CoreGraphics;
@@ -15,6 +16,9 @@ namespace Microsoft.StandardUI.Cocoa
     [Register("NSStandardUIHost")]
     public class NSStandardUIHost : NSView
     {
+        static Dictionary<Type, object> globalContext = new();
+        static event EventHandler globalContextChanged;
+
         FontManager fontManager = new(SKFontManager.Default);
         StateManager stateManager;
         Root root;
@@ -24,7 +28,16 @@ namespace Microsoft.StandardUI.Cocoa
         public NSStandardUIHost(IntPtr handle) : base(handle) => Initialize();
         public NSStandardUIHost(CGRect frameRect) : base(frameRect) => Initialize();
 
-        public static void Reference() { }
+        /// <summary>
+        /// Sets additional context that will be added to every NSStandardUIHost
+        /// </summary>
+        /// <remarks>Do not modify the context dictionary once it is passed into GetGlobalContext. If you
+        /// need to modify the global context call SetGobalContext again.</remarks>
+        public static void SetGlobalContext(Dictionary<Type, object> context)
+        {
+            globalContext = context;
+            globalContextChanged?.Invoke(null, EventArgs.Empty);
+        }
 
         void Initialize()
         {
@@ -32,6 +45,7 @@ namespace Microsoft.StandardUI.Cocoa
             CanDrawConcurrently = false;
 
             stateManager = new(BeginInvokeOnMainThread);
+            globalContextChanged += OnGlobalContextChanged;
             rootLayer = new();
             rootLayer.Frame = Bounds;
             AddSubview(rootLayer);
@@ -48,6 +62,14 @@ namespace Microsoft.StandardUI.Cocoa
                 base.Frame = value;
                 rootLayer.Frame = Bounds;
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing)
+                globalContextChanged -= OnGlobalContextChanged;
         }
 
         public override void DrawRect(CGRect dirtyRect)
@@ -91,16 +113,25 @@ namespace Microsoft.StandardUI.Cocoa
             var systemTypeface = fontManager.CreateTypeface("Helvetica Neue");
             TextTheme textTheme = new(systemTypeface, 12, Colors.Black);
 
-            return new(stateManager, rootLayer, new()
+            Dictionary<Type, object> context = new()
             {
                 { typeof(DpiScale), new DpiScale(scale, scale) },
                 { typeof(IFontManager), fontManager },
                 { typeof(TextTheme), textTheme },
                 { typeof(FlowDirection), flowDirection }
-            });
+            };
+
+            var currentGlobal = globalContext;
+            foreach (var (key, value) in currentGlobal)
+                context[key] = value;
+
+            return new(stateManager, rootLayer, context);
         }
 
         void Root_RootNodeChanged(object sender, EventArgs e) =>
             rootLayer.Root = root.RootNode;
+
+        void OnGlobalContextChanged(object sender, EventArgs e) =>
+            BeginInvokeOnMainThread(() => root.Context = CreateContext());
     }
 }

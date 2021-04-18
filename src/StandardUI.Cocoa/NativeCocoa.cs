@@ -27,7 +27,7 @@ namespace Microsoft.StandardUI.Cocoa
         /// <param name="create">Creates a new instance of the underlying control. Only called once.</param>
         /// <param name="update">Updates the previously created instance with the current state.</param>
         /// <param name="computeSize">Compute the desired frame size given the and available size.</param>
-        public NativeCocoa(Func<TNative> create, Action<TNative> update, Func<TNative, Size, CGSize> computeSize)
+        public NativeCocoa(Func<TNative> create, Action<TNative> update, Func<TNative, Size, (CGSize, float?)> computeSize)
         {
             Create = create;
             Update = update;
@@ -36,18 +36,19 @@ namespace Microsoft.StandardUI.Cocoa
 
         public Func<TNative> Create { get; }
         public Action<TNative> Update { get; }
-        public Func<TNative, Size, CGSize> ComputeSize { get; }
+        public Func<TNative, Size, (CGSize, float?)> ComputeSize { get; }
 
         public override Node CreateNode(Node parent, Context context) =>
             new NativeCocoaNode<TNative>(parent, context, this);
 
-        static CGSize IntrinsicSize(TNative view, Size incomming)
+        static (CGSize, float?) IntrinsicSize(TNative view, Size incomming)
         {
             var insets = view.AlignmentRectInsets;
             var cgSize = view.IntrinsicContentSize;
             cgSize.Width += insets.Left + insets.Right;
             cgSize.Height += insets.Top + insets.Bottom;
-            return cgSize;
+            var baseline = cgSize.Height - (insets.Bottom - view.BaselineOffsetFromBottom);
+            return (cgSize, (float)baseline);
         }
     }
 
@@ -115,16 +116,11 @@ namespace Microsoft.StandardUI.Cocoa
 
         (Size, float?) ArrangeImpl(Size availableSize)
         {
-            var cgSize = Element.ComputeSize(view, availableSize);
+            var (cgSize, baseline) = Element.ComputeSize(view, availableSize);
             view.SetFrameSize(cgSize);
 
-            // It's not clear that cocoa baseline is the exact equivalent of StandardUI baseline.
             var size = view.Frame.Size.Into();
-            var baseline = view.BaselineOffsetFromBottom;
-            if (baseline == 0)
-                arrangeResult = (size, null);
-            else
-                arrangeResult = (size, (float)(cgSize.Height - baseline));
+            arrangeResult = (size, baseline);
             previousAvailable = availableSize;
             return arrangeResult.Value;
         }
