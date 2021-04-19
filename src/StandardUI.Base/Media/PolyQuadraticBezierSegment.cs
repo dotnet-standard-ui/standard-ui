@@ -5,6 +5,6 @@ namespace Microsoft.StandardUI.Media
 {
     public class PolyQuadraticBezierSegment : PathSegment
     {
-        public IReadOnlyList<Point> Points { get; init; } = Array.Empty<Point>();
+        public Points Points { get; init; } = Points.Default;
     }
 }
