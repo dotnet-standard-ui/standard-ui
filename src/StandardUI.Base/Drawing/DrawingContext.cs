@@ -17,10 +17,10 @@ namespace Microsoft.StandardUI.Drawing
         public bool IsVisible { get; private set; }
         public Matrix TotalTransform => totalTransform[totalTransform.Count - 1];
 
-        public void DrawEllipse(Ellipse ellipse)
+        public void DrawEllipse(Ellipse ellipse, Size size)
         {
             SKPath skPath = new SKPath();
-            SKRect skRect = SKRect.Create(0, 0, ellipse.Width, ellipse.Height);
+            SKRect skRect = SKRect.Create(0, 0, size.Width, size.Height);
             skPath.AddOval(skRect);
 
             DrawShapePath(skPath, ellipse);
@@ -58,10 +58,10 @@ namespace Microsoft.StandardUI.Drawing
             DrawShapePath(skPath, polyline);
         }
 
-        public void DrawRectangle(Rectangle rectangle)
+        public void DrawRectangle(Rectangle rectangle, Size size)
         {
             SKPath skPath = new SKPath();
-            SKRect skRect = SKRect.Create(0, 0, (float)rectangle.Width, (float)rectangle.Height);
+            SKRect skRect = SKRect.Create(0, 0, size.Width, size.Height);
             if (rectangle.RadiusX > 0 || rectangle.RadiusY > 0)
                 skPath.AddRoundRect(skRect, (float)rectangle.RadiusX, (float)rectangle.RadiusY);
             else
@@ -128,9 +128,9 @@ namespace Microsoft.StandardUI.Drawing
             else throw new InvalidOperationException($"Brush type {brush.GetType()} isn't currently supported");
         }
 
-        public static SKColor ToSkiaColor(Color color) => new SKColor(color.Red, color.Green, color.Blue, color.Alpha);
+        private static SKColor ToSkiaColor(Color color) => new SKColor(color.Red, color.Green, color.Blue, color.Alpha);
 
-        public static SKShader ToSkiaShader<TShape>(GradientBrush gradientBrush, TShape shape) where TShape : Shape<TShape>
+        private static SKShader ToSkiaShader<TShape>(GradientBrush gradientBrush, TShape shape) where TShape : Shape<TShape>
         {
             SKShaderTileMode tileMode = gradientBrush.SpreadMethod switch
             {
@@ -166,7 +166,7 @@ namespace Microsoft.StandardUI.Drawing
             else throw new InvalidOperationException($"GradientBrush type {gradientBrush.GetType()} is unknown");
         }
 
-        public static SKPoint GradientBrushPointToSkiaPoint<TShape>(Point point, GradientBrush gradientBrush, TShape shape) where TShape : Shape<TShape>
+        private static SKPoint GradientBrushPointToSkiaPoint<TShape>(Point point, GradientBrush gradientBrush, TShape shape) where TShape : Shape<TShape>
         {
             if (gradientBrush.MappingMode == BrushMappingMode.RelativeToBoundingBox) {
                 // TODO: Support auto width/height properly

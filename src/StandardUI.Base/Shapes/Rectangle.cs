@@ -27,7 +27,7 @@ namespace Microsoft.StandardUI.Shapes
         public override Size NaturalSize => new Size(Width, Height);
 
         public override void Render(DrawingContext context, Size size) =>
-            context.DrawRectangle(this);
+            context.DrawRectangle(this, size);
 
         protected override bool IsRenderValid(Rectangle oldElement) =>
             base.IsRenderValid(oldElement) &&

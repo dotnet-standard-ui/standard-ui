@@ -17,6 +17,6 @@ namespace Microsoft.StandardUI.Shapes
         public override Size NaturalSize => new Size(Width, Height);
 
         public override void Render(DrawingContext context, Size size) =>
-            context.DrawEllipse(this);
+            context.DrawEllipse(this, size);
     }
 }
