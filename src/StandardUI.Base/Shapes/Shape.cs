@@ -43,9 +43,13 @@ namespace Microsoft.StandardUI.Shapes
         {
             Size naturalSize = NaturalSize;
             return new Size(
-                !float.IsNaN(naturalSize.Width) ? naturalSize.Width : availableSize.Width,
-                !float.IsNaN(naturalSize.Height) ? naturalSize.Height : availableSize.Height);
+                GetSpecifiedOrDefault(naturalSize.Width, availableSize.Width),
+                GetSpecifiedOrDefault(naturalSize.Height, availableSize.Height)
+            );
         }
+
+        public static float GetSpecifiedOrDefault(float specifiedValue, float defaultValue) =>
+            float.IsNaN(specifiedValue) || float.IsPositiveInfinity(specifiedValue) ? defaultValue : specifiedValue;
 
         protected override bool IsArrangeValid(Self oldElement) =>
             NaturalSize == oldElement.NaturalSize;
