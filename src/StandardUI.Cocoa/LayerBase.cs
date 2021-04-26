@@ -23,7 +23,6 @@ namespace Microsoft.StandardUI.Cocoa
         {
         }
 
-
         [Export("requiresConstraintBasedLayout")]
         public static new bool RequiresConstraintBasedLayout() => false;
 
@@ -35,11 +34,18 @@ namespace Microsoft.StandardUI.Cocoa
         public override void DrawRect(CGRect dirtyRect)
         {
             var scaleFactor = Window.BackingScaleFactor;
-            List<Action<SKCanvas>> render = new();
-            DrawingContext childContext = new(render);
+
+            var skPictureRecorder = new SKPictureRecorder();
+
+            // TODO: Can we restrict the culling rect here?
+            SKRect skCullingRect = SKRect.Create(float.MinValue, float.MinValue, float.MaxValue, float.MaxValue);
+            SKCanvas canvas = skPictureRecorder.BeginRecording(skCullingRect);
+
+            DrawingContext childContext = new(canvas);
             renderOrder = new();
             childContext.Push(Matrix.Scale((float)scaleFactor, (float)scaleFactor));
             Render(childContext);
+            SKPicture render = skPictureRecorder.EndRecording();
 
             var viewToIndex = renderOrder
                 .Select((view, idx) => (view, idx))
