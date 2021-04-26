@@ -1,6 +1,4 @@
-﻿using Microsoft.StandardUI.Drawing;
-
-namespace Microsoft.StandardUI.Media
+﻿namespace Microsoft.StandardUI.Media
 {
     public class SolidColorBrush : Brush
     {

@@ -30,7 +30,7 @@ namespace Microsoft.StandardUI.Cocoa
             set => Layer.ContentsScale = value;
         }
 
-        public List<Action<SKCanvas>> Render { get; set; }
+        public SKPicture Render { get; set; }
 
         void Layer_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
         {
@@ -39,8 +39,7 @@ namespace Microsoft.StandardUI.Cocoa
 
             var canvas = e.Surface.Canvas;
             canvas.Clear();
-            foreach (var action in Render)
-                action(canvas);
+            canvas.DrawPicture(Render, 0, 0);
 
             Render = null;
         }
