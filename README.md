@@ -2,17 +2,18 @@
 
 # 🐱‍🐉 .NET Standard UI (aka DinoCat)
 
-## Value Propositions
+## Overview
 
-.NET Standard UI aims to help solve these problems:
+.NET Standard UI an experimental project that aims to solve these problems:
 
-**Grow the Microsoft UI control ecosystem** - Writing a single control that can target several UI
-frameworks means it's easier to write controls and they can target a bigger set of users. If you're writing say a chart control or a fancy radial gauge, no longer do you need to write separate versions for WPF/Xamarin.Forms/UWP/WinUI/Uno or create your own platform wrappers to share code.
-.NET Standard UI allows a single control assembly that works on all supported UI frameworks.
+**Enable writing portable controls, that work on any .NET UI framework** - .NET Standard UI allows authoring a control (called a Standard Control) that works on all supported UI frameworks, all from a single assembly.
+If you're writing say a chart control or a fancy radial gauge, no longer do you need to write separate versions for WPF/Xamarin.Forms/MAUI/UWP/WinUI/Uno/WinForms or create your own platform wrappers to share code.
 UI framework specific control APIs (e.g. DependencyProperty for control properties on WPF/UWP/WinUI properties and
 BindableProperty for Xamarin/MAUI) are generated as usage time, via source generators.
+Writing a single control that can target several UI frameworks means it's easier to write controls and they can target a bigger set of users. 
 This helps control vendors, community members that build controls, and Microsoft as it builds out first
-party controls - cheaper + wider reach should mean more controls in the ecosystem. For Microsoft controls, possibilities include cross platform Fluent UI or controls that interoperate with MS services, like the MS Graph controls [here](https://docs.microsoft.com/en-us/windows/communitytoolkit/graph/controls/peoplepicker). 
+party controls - cheaper + wider reach should mean more controls in the ecosystem. For Microsoft controls, possibilities include cross platform Fluent UI or controls that interoperate with MS services, like the MS Graph controls [here](https://docs.microsoft.com/en-us/windows/communitytoolkit/graph/controls/peoplepicker). Even if you don't write any controls yourself, having a bigger set of controls to choose from, no matter what UI framework 
+you're using, should make you more productive.
 
 **Reduce .NET UI Fragmentation** - Today there are multiple XAML UI frameworks (WPF, UWP, WinUI, Xamarin.Forms, .NET MAUI, Uno, Avalonia, etc.). All are pretty similar, though slightly different.
 For the most part they don't share code. The naming differences are annoying. The binary API differences mean you can't write code (like controls or tools) that work on multiple UI platforms. The lack of a clear vision from MS holds back adoption.
@@ -27,6 +28,10 @@ are applied. Sometimes diff'ing is combined with change notifications, This styl
 changes during hot reload, as ALL code (e.g. bindings code) is rerun when regenerating the UI, even if just a single control ends up needing to be updated on the screen. This is similar to [Comet](https://github.com/dotnet/Comet), but
 also works for existing UI frameworks, like WPF.
 
+This project is experimental. As such we want your feedback. Is this the right approach? Does it solve real life problems for you? What would you do
+differently? Post to [Discussions](https://github.com/dotnet-standard-ui/standard-ui/discussions) or
+[Issues](https://github.com/dotnet-standard-ui/standard-ui/issues) to tell us.
+
 ## Beautiful UI Anywhere
 
 Create high quality UI that is consistent and runs with native performance across a wide variety of devices. Write controls that integrate seamlessly with existing C# UI frameworks, initially targeting WPF and Cocoa.
@@ -39,18 +44,10 @@ If you're already using an existing C# UI framework (WinForms, Wpf, Xamarin, Uwp
 
 ## Progress
 
-* Basic Wpf integration
+It's definitely a work in progress. Here's what works currently:
+
+* Basic Wpf and Cocoa integration
   * Projections from Wpf to DinoCat (need better container support)
   * Projections from DinoCat to Wpf (very early)
 * Cross platform rendering with SkiaSharp
 * RTL layout
-
-## Missing Features
-
-* Animations
-* Control library
-* Rich text layout (Multiline, mixed styles/fonts, bidi, ect)
-* WinForms/Xamarin/Uwp/WinUI integration
-* HotReload integration (DinoCat is set up for hot reload. Once the tooling catches up this should be easy...)
-* Publish to NuGet
-* And lots more... Everything is very early and needs another iteration or so...
