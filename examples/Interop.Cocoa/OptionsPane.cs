@@ -31,8 +31,8 @@ namespace Interop.Cocoa
         public override Element Build(Context context)
         {
             var style = context.Get<Style>();
-            return new Column(
-                new Row(
+            return new VStack(
+                new HStack(
                     VerticalAlignment.Baseline,
                     TextBlock("Configuration:"),
                     Combobox(Data.Configurations, Data.SelectedConfiguration),
@@ -41,13 +41,13 @@ namespace Interop.Cocoa
                     ).Margin(0, 10, 0, 10),
                 TextBlock("General Options")
                     .Font(style.HeaderFont),
-                new Column(
+                new VStack(
                     Checkbox("Generate overflow checks", Data.GenerateOverflowChecks),
                     Checkbox("Enable optimizations", Data.EnableOptimizations),
 
                     // By Binding to GenerateXmlDoc we can update Enabled if the checkbox is checked.
                     Data.GenerateXmlDoc.Bind(() =>
-                        new Row(
+                        new HStack(
                             VerticalAlignment.Baseline,
                             Checkbox("Generate xml documentation:", Data.GenerateXmlDoc),
                             TextEdit(Data.XmlDocPath)
@@ -60,19 +60,19 @@ namespace Interop.Cocoa
                                 .BezelStyle(NSBezelStyle.Rounded)
                             )
                         ),
-                    new Row(
+                    new HStack(
                         VerticalAlignment.Baseline,
                         TextBlock("Define Symbols:"),
                         TextEdit(Data.Symbols)
                             .Width(float.PositiveInfinity)
                             .Margin(0, 0, 6, 6)
                         ),
-                    new Row(
+                    new HStack(
                         VerticalAlignment.Baseline,
                         TextBlock("Platform targets:"),
                         Combobox(Data.PlatformTargets, Data.SelectedPlatformTarget)
                         ),
-                    new Row(
+                    new HStack(
                         new Native.NSButton()
                             .Title("Cancel")
                             .BezelStyle(NSBezelStyle.Rounded)
