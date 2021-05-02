@@ -16,7 +16,7 @@ namespace Interop.Wpf
         public string Incomming { get; }
 
         public override Element Build(Context context, int state, Action<int> setState) =>
-            Column(
+            VStack(
                 TextBlock().Text(Incomming),
                 MyUserControlWrapper().MyValue(state),
                 Button()
@@ -24,7 +24,7 @@ namespace Interop.Wpf
                     .OnClick(args => setState(state + 1))
                     .Margin(2)
                     .Center(),
-                Row(VerticalAlignment.Baseline,
+                HStack(VerticalAlignment.Baseline,
                     Text("HELLO", fontSize: 32),
                     Button("world", () => { }),
                     Text(" trailing text")),

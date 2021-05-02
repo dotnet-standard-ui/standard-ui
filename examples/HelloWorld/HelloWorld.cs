@@ -4,7 +4,7 @@ using Microsoft.StandardUI.State;
 using static Microsoft.StandardUI.Elements.Factories;
 
 App.Run(() =>
-    State.Inject<int>((count, setCount) => Row(
+    State.Inject<int>((count, setCount) => HStack(
         VerticalAlignment.Center,
         Text("Hello World 🐱‍🐉")
             .Margin(2),

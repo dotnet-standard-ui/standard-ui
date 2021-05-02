@@ -12,11 +12,11 @@ namespace Microsoft.StandardUI.Elements
             Text(text, foreground, fontSize, typeface);
         public static Button Button(Element content, Action click) =>
             new(content, click);
-        public static Row Row(VerticalAlignment alignment, params Expand[] children) => new(alignment, children);
-        public static Row Row(params Expand[] children) => new(children);
-        public static Column Column(HorizontalAlignment alignment, params Expand[] children) => new(alignment, children);
-        public static Column Column(params Expand[] children) => new(children);
-        public static Stack Stack(params Expand[] children) => new(children);
+        public static HStack HStack(VerticalAlignment alignment, params Expand[] children) => new(alignment, children);
+        public static HStack HStack(params Expand[] children) => new(children);
+        public static VStack VStack(HorizontalAlignment alignment, params Expand[] children) => new(alignment, children);
+        public static VStack VStack(params Expand[] children) => new(children);
+        public static ZStack ZStack(params Expand[] children) => new(children);
         public static Input Input(
             ControlType controlType,
             Element child,

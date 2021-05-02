@@ -19,9 +19,9 @@ namespace Microsoft.StandardUI.Base.Tests
         }
 
         [Fact]
-        public void RowBaseline()
+        public void HStackBaseline()
         {
-            var element = Row(VerticalAlignment.Baseline,
+            var element = HStack(VerticalAlignment.Baseline,
                 new SetBaseline(Rectangle(Colors.Red, 10, 100), 0),
                 Rectangle(Colors.Blue, 10, 100));
             var node = element.CreateNode(null, context);
@@ -33,7 +33,7 @@ namespace Microsoft.StandardUI.Base.Tests
         [Fact]
         public void RowBaseline_SkipTop()
         {
-            var element = Row(VerticalAlignment.Baseline,
+            var element = HStack(VerticalAlignment.Baseline,
                 new SetBaseline(Rectangle(Colors.Red, 10, 100), 0).Top(),
                 Rectangle(Colors.Blue, 10, 100));
             var node = element.CreateNode(null, context);
@@ -45,7 +45,7 @@ namespace Microsoft.StandardUI.Base.Tests
         [Fact]
         public void ColumnBaseline()
         {
-            var element = Column(
+            var element = VStack(
                 Rectangle(Colors.Red, 10, 10),
                 new SetBaseline(Rectangle(Colors.Green, 10, 10), 5),
                 Rectangle(Colors.Blue, 10, 10));

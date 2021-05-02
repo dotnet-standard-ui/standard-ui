@@ -27,7 +27,7 @@ WpfComboBox WpfComboBox() => new();
 /// </summary>
 Element StateExample() =>
     State.Inject<int>((state, setState) =>
-        Row(
+        HStack(
             WpfButton()
                 .Content($"Hello world {state}")
                 .OnClick(_ => setState(state + 1))
@@ -52,7 +52,7 @@ Element StateExample() =>
 /// </summary>
 Element UnsafeStateExample() =>
     State.UnsafeInject<int>(state =>
-        Row(
+        HStack(
             WpfButton()
                 .Content(state.Bind(() => $"Hello world {state}"))
                 .OnClick(_ => state.Value += 1)
@@ -78,7 +78,7 @@ Element UnsafeStateExample() =>
 /// </summary>
 Element ExplicitStateExample() =>
     ExplicitState.Inject<int>(state =>
-        Row(
+        HStack(
             WpfButton()
                 .Content(state.Bind(value => $"Hello world {value}"))
                 .OnClick(_ => state.Set(c => c + 1))
@@ -111,7 +111,7 @@ Element ExplicitStateExample() =>
 /// </summary>
 Element ImplicitStateExample() =>
     ImplicitState.Inject<int>(state =>
-        Row(
+        HStack(
             WpfButton()
                 .Content("TODO")
                 .OnClick(_ => state.Value += 1)
@@ -132,7 +132,7 @@ App.Run(() => {
     };
     var exampleNames = examples.Select(ex => ex.Item1).ToList();
 
-    return State.Inject<int>((state, setState) => Column(
+    return State.Inject<int>((state, setState) => VStack(
             HorizontalAlignment.Center,
             WpfComboBox()
                 .ItemsSource(exampleNames)

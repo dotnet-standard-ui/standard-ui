@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace Microsoft.StandardUI.Elements
 {
-    public class Column : Container<Expand>
+    public class VStack : Container<Expand>
     {
-        public Column(HorizontalAlignment alignment, params Expand[] children) : base(children) =>
+        public VStack(HorizontalAlignment alignment, params Expand[] children) : base(children) =>
             Alignment = alignment;
-        public Column(params Expand[] children) : this(HorizontalAlignment.Left, children) { }
+        public VStack(params Expand[] children) : this(HorizontalAlignment.Left, children) { }
 
         public HorizontalAlignment Alignment { get; }
 
@@ -23,10 +23,10 @@ namespace Microsoft.StandardUI.Elements
 
         public override bool IsLayoutInvalid(Container<Expand> oldContainer)
         {
-            var oldColumn = (Column)oldContainer;
-            if (oldColumn.Alignment != Alignment)
+            var oldVStack = (VStack)oldContainer;
+            if (oldVStack.Alignment != Alignment)
                 return true;
-            return Children.Zip(oldColumn.Children, (a, b) => (a, b)).Any(pair => pair.a.Factor != pair.b.Factor);
+            return Children.Zip(oldVStack.Children, (a, b) => (a, b)).Any(pair => pair.a.Factor != pair.b.Factor);
         }
 
         public override Element ToElement(Expand child) => child.Child;

@@ -52,13 +52,13 @@ namespace Microsoft.StandardUI.Elements
                 },
                 gotFocus: visualizeFocus => setState(state with { VisualizeFocus = visualizeFocus }),
                 lostFocus: () => setState(state with { VisualizeFocus = false, SpaceDown = false }),
-                child: Stack(
+                child: ZStack(
                         Rectangle(
                             new Paint(
                                 fill: state.Highlight ? 0xFFBEE6FD : 0xFFDDDDDD,
                                 stroke: state.Highlight ? 0xFF3C7FB1 : 0xFF707070)
                             ).Expand(),
-                        Stack(
+                        ZStack(
                             Content,
                             Rectangle(
                                 new Paint(

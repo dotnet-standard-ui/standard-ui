@@ -5,18 +5,18 @@ using System.Linq;
 
 namespace Microsoft.StandardUI.Elements
 {
-    public class Row : Container<Expand>
+    public class HStack : Container<Expand>
     {
-        public Row(VerticalAlignment alignment, FlowDirection? flowDirection, params Expand[] children) : base(children)
+        public HStack(VerticalAlignment alignment, FlowDirection? flowDirection, params Expand[] children) : base(children)
         {
             Alignment = alignment;
             FlowDirection = flowDirection;
         }
-        public Row(VerticalAlignment alignment, params Expand[] children) : this(alignment, null, children) { }
+        public HStack(VerticalAlignment alignment, params Expand[] children) : this(alignment, null, children) { }
 
-        public Row(FlowDirection? flowDirection, params Expand[] children) : this(VerticalAlignment.Top, flowDirection, children) { }
+        public HStack(FlowDirection? flowDirection, params Expand[] children) : this(VerticalAlignment.Top, flowDirection, children) { }
 
-        public Row(params Expand[] children) : this(VerticalAlignment.Top, children)
+        public HStack(params Expand[] children) : this(VerticalAlignment.Top, children)
         { }
 
         public VerticalAlignment Alignment { get; }
@@ -36,10 +36,10 @@ namespace Microsoft.StandardUI.Elements
 
         public override bool IsLayoutInvalid(Container<Expand> oldContainer)
         {
-            var oldRow = (Row)oldContainer;
-            if (Alignment != oldRow.Alignment)
+            var oldHStack = (HStack)oldContainer;
+            if (Alignment != oldHStack.Alignment)
                 return true;
-            return Children.Zip(oldRow.Children, (a, b) => (a, b)).Any(pair => pair.a.Factor != pair.b.Factor);
+            return Children.Zip(oldHStack.Children, (a, b) => (a, b)).Any(pair => pair.a.Factor != pair.b.Factor);
         }
 
         public override Element ToElement(Expand child) => child.Child;

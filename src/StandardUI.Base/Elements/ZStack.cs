@@ -7,9 +7,9 @@ using System.Linq;
 
 namespace Microsoft.StandardUI.Elements
 {
-    public class Stack : Container<Expand>
+    public class ZStack : Container<Expand>
     {
-        public Stack(params Expand[] children) : base(children) { }
+        public ZStack(params Expand[] children) : base(children) { }
 
         public override (Size, float?) Arrange(Context context, Size availableSize, List<Node> children) =>
             throw new NotImplementedException();
@@ -19,14 +19,14 @@ namespace Microsoft.StandardUI.Elements
         public override Element ToElement(Expand child) => child.Child;
 
         public override Node CreateNode(Node? parent, Context context) =>
-            new StackNode(parent, context, this);
+            new ZStackNode(parent, context, this);
     }
 
-    internal class StackNode : NodeBase<Stack>
+    internal class ZStackNode : NodeBase<ZStack>
     {
         private List<PseudoLayer> children;
 
-        public StackNode(Node? parent, Context context, Stack stack) : base(parent, context, stack)
+        public ZStackNode(Node? parent, Context context, ZStack stack) : base(parent, context, stack)
         {
             var children = stack.Children;
             this.children = new List<PseudoLayer>(children.Count);
@@ -99,7 +99,7 @@ namespace Microsoft.StandardUI.Elements
                 child.OnRender(context);
         }
 
-        protected override void UpdateElement(Stack oldStack, Context oldContext)
+        protected override void UpdateElement(ZStack oldStack, Context oldContext)
         {
             var newCount = Element.Children.Count;
             if (children.Count < newCount)

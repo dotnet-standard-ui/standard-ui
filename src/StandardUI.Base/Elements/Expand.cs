@@ -4,10 +4,10 @@ using System.Collections.Generic;
 namespace Microsoft.StandardUI.Elements
 {
     /// <summary>
-    /// Take up remaining space in a <see cref="Row"/>, <see cref="Column"/>, or <see cref="Stack"/>.
+    /// Take up remaining space in a <see cref="HStack"/>, <see cref="VStack"/>, or <see cref="ZStack"/>.
     /// </summary>
-    /// <remarks><see cref="Row"/> and <see cref="Column"/> split their remaing space based on the <see cref="Factor"/>.
-    /// For <see cref="Stack"/> any non-zero factor fills the entire stack.</remarks>
+    /// <remarks><see cref="HStack"/> and <see cref="VStack"/> split their remaing space based on the <see cref="Factor"/>.
+    /// For <see cref="ZStack"/> any non-zero factor fills the entire stack.</remarks>
     /// <param name="factor">The amount of space to take up relative to other expanded elements. 0 indicates the element should not be expanded.</param>
     public class Expand
     {
