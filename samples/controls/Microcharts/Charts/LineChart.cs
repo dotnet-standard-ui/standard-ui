@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.StandardUI;
 using SkiaSharp;
 
 namespace Microcharts
@@ -12,20 +13,16 @@ namespace Microcharts
     /// </summary>
     public class LineChart : PointChart
     {
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Microcharts.LineSeriesChart"/> class.
         /// </summary>
-        public LineChart() : base()
+        public LineChart(IChart control) : base(control)
         {
         }
 
-        #endregion
-
         #region Properties
 
-        private Dictionary<ChartSerie, List<SKPoint>> pointsPerSerie = new Dictionary<ChartSerie, List<SKPoint>>();
+        private Dictionary<ChartSeries, List<SKPoint>> pointsPerSerie = new Dictionary<ChartSeries, List<SKPoint>>();
 
         /// <summary>
         /// Gets or sets the size of the line.
@@ -53,8 +50,6 @@ namespace Microcharts
 
         #endregion
 
-        #region Methods
-
         /// <inheritdoc/>
         protected override float CalculateHeaderHeight(Dictionary<ChartEntry, SKRect> valueLabelSizes)
         {
@@ -74,7 +69,7 @@ namespace Microcharts
             base.DrawContent(canvas, width, height);
         }
 
-        protected override void DrawNullPoint(ChartSerie serie, SKCanvas canvas) {
+        protected override void DrawNullPoint(ChartSeries serie, SKCanvas canvas) {
             //Some of the drawing algorithms index into pointsPerSerie
             var point = new SKPoint(float.MinValue, float.MinValue);
             pointsPerSerie[serie].Add(point);
@@ -117,10 +112,10 @@ namespace Microcharts
             }
         }
 
-        private void DrawValueLabels(SKCanvas canvas, SKSize itemSize, Dictionary<ChartEntry, SKRect> valueLabelSizes)
+        private void DrawValueLabels(SKCanvas canvas, Size itemSize, Dictionary<ChartEntry, Rect> valueLabelSizes)
         {
-            ValueLabelOption valueLabelOption = ValueLabelOption;
-            if (ValueLabelOption == ValueLabelOption.TopOfChart && Series.Count() > 1)
+            ValueLabelOption valueLabelOption = Control.ValueLabelOption;
+            if (valueLabelOption == ValueLabelOption.TopOfChart && Series.Count() > 1)
                 valueLabelOption = ValueLabelOption.TopOfElement;
 
             if (valueLabelOption == ValueLabelOption.TopOfElement || valueLabelOption == ValueLabelOption.OverElement)
@@ -134,35 +129,35 @@ namespace Microcharts
                         string label = entry.ValueLabel;
                         if (!string.IsNullOrEmpty(label))
                         {
-                          var drawedPoint = pps.Value.ElementAt(i);
-                          SKPoint point;
-                          YPositionBehavior yPositionBehavior = YPositionBehavior.None;
+                            var drawedPoint = pps.Value.ElementAt(i);
+                            Point point;
+                            YPositionBehavior yPositionBehavior = YPositionBehavior.None;
 
                             if (!valueLabelSizes.ContainsKey(entry))
                             {
                                 continue;
                             }
 
-                          var valueLabelSize = valueLabelSizes[entry];
-                          if (valueLabelOption == ValueLabelOption.TopOfElement)
-                          {
-                              point = new SKPoint(drawedPoint.X, drawedPoint.Y - (PointSize / 2) - (Margin / 2));
-                              if (ValueLabelOrientation == Orientation.Vertical)
-                                  yPositionBehavior = YPositionBehavior.UpToElementHeight;
-                          }
-                          else
-                          {
-                              if (ValueLabelOrientation == Orientation.Vertical)
-                                  yPositionBehavior = YPositionBehavior.UpToElementMiddle;
-                              else
-                                  yPositionBehavior = YPositionBehavior.DownToElementMiddle;
+                            var valueLabelSize = valueLabelSizes[entry];
+                            if (valueLabelOption == ValueLabelOption.TopOfElement)
+                            {
+                                point = new Point(drawedPoint.X, drawedPoint.Y - (PointSize / 2) - (Control.Margin / 2));
+                                if (Control.ValueLabelOrientation == Orientation.Vertical)
+                                      yPositionBehavior = YPositionBehavior.UpToElementHeight;
+                            }
+                            else
+                            {
+                                if (Control.ValueLabelOrientation == Orientation.Vertical)
+                                    yPositionBehavior = YPositionBehavior.UpToElementMiddle;
+                                else
+                                    yPositionBehavior = YPositionBehavior.DownToElementMiddle;
 
-                              point = new SKPoint(drawedPoint.X, drawedPoint.Y);
+                                point = new Point(drawedPoint.X, drawedPoint.Y);
+                            }
 
-                          }
-
-                          DrawHelper.DrawLabel(canvas, ValueLabelOrientation, yPositionBehavior, itemSize, point, entry.ValueLabelColor.WithAlpha((byte)(255 * AnimationProgress)), valueLabelSize, label, ValueLabelTextSize, Typeface);
-                        } else
+                            DrawHelper.DrawLabel(canvas, Control.ValueLabelOrientation, yPositionBehavior, itemSize, point, entry.ValueLabelColor.WithAlpha((byte)(255 * AnimationProgress)), valueLabelSize, label, ValueLabelTextSize, Typeface);
+                        }
+                        else
                         {
                             continue;
                         }
@@ -235,7 +230,7 @@ namespace Microcharts
             }
         }
 
-        private void DrawLineArea(SKCanvas canvas, ChartSerie serie, SKPoint[] points, SKSize itemSize, float origin)
+        private void DrawLineArea(SKCanvas canvas, ChartSeries serie, SKPoint[] points, SKSize itemSize, float origin)
         {
             if (LineAreaAlpha > 0 && points.Length > 1)
             {
@@ -305,12 +300,12 @@ namespace Microcharts
         /// <inheritdoc/>
         protected override void DrawValueLabel(SKCanvas canvas, Dictionary<ChartEntry, SKRect> valueLabelSizes, float headerWithLegendHeight, SKSize itemSize, SKSize barSize, ChartEntry entry, float barX, float barY, float itemX, float origin)
         {
-            if(Series.Count() == 1 && ValueLabelOption == ValueLabelOption.TopOfChart)
+            if(Series.Count() == 1 && Control.ValueLabelOption == ValueLabelOption.TopOfChart)
                 base.DrawValueLabel(canvas, valueLabelSizes, headerWithLegendHeight, itemSize, barSize, entry, barX, barY, itemX, origin);
         }
 
         /// <inheritdoc/>
-        protected override void DrawBar(ChartSerie serie, SKCanvas canvas, float headerHeight, float itemX, SKSize itemSize, SKSize barSize, float origin, float barX, float barY, SKColor color)
+        protected override void DrawBar(ChartSeries serie, SKCanvas canvas, float headerHeight, float itemX, SKSize itemSize, SKSize barSize, float origin, float barX, float barY, SKColor color)
         {
             //Drawing entry point at center of the item (label) part
             var point = new SKPoint(itemX, barY);
@@ -318,16 +313,16 @@ namespace Microcharts
         }
 
         /// <inheritdoc/>
-        protected override void DrawBarArea(SKCanvas canvas, float headerHeight, SKSize itemSize, SKSize barSize, SKColor color, float origin, float value, float barX, float barY)
+        protected override void DrawBarArea(SKCanvas canvas, float headerHeight, Size itemSize, Size barSize, Color color, float origin, float value, float barX, float barY)
         {
             //Area is draw on the OnDrawContentEnd
         }
 
-        private (SKPoint control, SKPoint nextPoint, SKPoint nextControl) CalculateCubicInfo(SKPoint[] points, int i, int next, SKSize itemSize)
+        private (Point control, Point nextPoint, Point nextControl) CalculateCubicInfo(Point[] points, int i, int next, Size itemSize)
         {
             var point = points[i];
             var nextPoint = points[next];
-            var controlOffset = new SKPoint(itemSize.Width * 0.8f, 0);
+            var controlOffset = new Point(itemSize.Width * 0.8f, 0);
             var currentControl = point + controlOffset;
             var nextControl = nextPoint - controlOffset;
             return (currentControl, nextPoint, nextControl);
@@ -359,7 +354,5 @@ namespace Microcharts
                 null,
                 SKShaderTileMode.Clamp);
         }
-
-        #endregion
     }
 }

@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Microsoft.StandardUI;
 using SkiaSharp;
 
 namespace Microcharts
@@ -15,16 +15,12 @@ namespace Microcharts
     /// </summary>
     public class BarChart : AxisBasedChart
     {
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Microcharts.BarSeriesChart"/> class.
         /// </summary>
-        public BarChart() : base()
+        public BarChart(IChart control) : base(control)
         {
         }
-
-        #endregion
 
         #region Properties
 
@@ -42,34 +38,32 @@ namespace Microcharts
 
         #endregion
 
-        #region Methods
-
         /// <inheritdoc/>
-        protected override float CalculateHeaderHeight(Dictionary<ChartEntry, SKRect> valueLabelSizes)
+        protected override float CalculateHeaderHeight(Dictionary<ChartEntry, Rect> valueLabelSizes)
         {
-            if (ValueLabelOption == ValueLabelOption.None || ValueLabelOption == ValueLabelOption.OverElement)
-                return Margin;
+            if (Control.ValueLabelOption == ValueLabelOption.None || Control.ValueLabelOption == ValueLabelOption.OverElement)
+                return Control.Margin;
 
             return base.CalculateHeaderHeight(valueLabelSizes);
         }
 
         /// <inheritdoc/>
-        protected override void DrawValueLabel(SKCanvas canvas, Dictionary<ChartEntry, SKRect> valueLabelSizes, float headerWithLegendHeight, SKSize itemSize, SKSize barSize, ChartEntry entry, float barX, float barY, float itemX, float origin)
+        protected override void DrawValueLabel(SKCanvas canvas, Dictionary<ChartEntry, Rect> valueLabelSizes, float headerWithLegendHeight, Size itemSize, Size barSize, ChartEntry entry, float barX, float barY, float itemX, float origin)
         {
             if (string.IsNullOrEmpty(entry?.ValueLabel))
                 return;
 
-            (SKPoint location, SKSize size) = GetBarDrawingProperties(headerWithLegendHeight, itemSize, barSize, 0, barX, barY);
-            if(ValueLabelOption == ValueLabelOption.TopOfChart)
+            (Point location, Size size) = GetBarDrawingProperties(headerWithLegendHeight, itemSize, barSize, 0, barX, barY);
+            if (Control.ValueLabelOption == ValueLabelOption.TopOfChart)
                 base.DrawValueLabel(canvas, valueLabelSizes, headerWithLegendHeight, itemSize, barSize, entry, barX, barY, itemX, origin);
-            else if(ValueLabelOption == ValueLabelOption.TopOfElement)
-                DrawHelper.DrawLabel(canvas, ValueLabelOrientation, ValueLabelOrientation == Orientation.Vertical ? YPositionBehavior.UpToElementHeight : YPositionBehavior.None, barSize, new SKPoint(location.X + size.Width / 2, barY - Margin), entry.ValueLabelColor.WithAlpha((byte)(255 * AnimationProgress)), valueLabelSizes[entry], entry.ValueLabel, ValueLabelTextSize, Typeface);
-            else if(ValueLabelOption == ValueLabelOption.OverElement)
-                DrawHelper.DrawLabel(canvas, ValueLabelOrientation, ValueLabelOrientation == Orientation.Vertical ? YPositionBehavior.UpToElementMiddle : YPositionBehavior.DownToElementMiddle, barSize, new SKPoint(location.X + size.Width / 2, barY + (origin - barY) / 2), entry.ValueLabelColor.WithAlpha((byte)(255 * AnimationProgress)), valueLabelSizes[entry], entry.ValueLabel, ValueLabelTextSize, Typeface);
+            else if (Control.ValueLabelOption == ValueLabelOption.TopOfElement)
+                DrawHelper.DrawLabel(canvas, Control.ValueLabelOrientation, ValueLabelOrientation == Orientation.Vertical ? YPositionBehavior.UpToElementHeight : YPositionBehavior.None, barSize, new SKPoint(location.X + size.Width / 2, barY - Margin), entry.ValueLabelColor.WithA((byte)(255 * AnimationProgress)), valueLabelSizes[entry], entry.ValueLabel, ValueLabelTextSize, Typeface);
+            else if (Control.ValueLabelOption == ValueLabelOption.OverElement)
+                DrawHelper.DrawLabel(canvas, Control.ValueLabelOrientation, Control.ValueLabelOrientation == Orientation.Vertical ? YPositionBehavior.UpToElementMiddle : YPositionBehavior.DownToElementMiddle, barSize, new Point(location.X + size.Width / 2, barY + (origin - barY) / 2), entry.ValueLabelColor.WithA((byte)(255 * AnimationProgress)), valueLabelSizes[entry], entry.ValueLabel, Control.ValueLabelTextSize, Typeface);
         }
 
         /// <inheritdoc />
-        protected override void DrawBar(ChartSerie serie, SKCanvas canvas, float headerHeight, float itemX, SKSize itemSize, SKSize barSize, float origin, float barX, float barY, SKColor color)
+        protected override void DrawBar(ChartSeries serie, SKCanvas canvas, float headerHeight, float itemX, SKSize itemSize, SKSize barSize, float origin, float barX, float barY, SKColor color)
         {
             using (var paint = new SKPaint
             {
@@ -83,21 +77,21 @@ namespace Microcharts
             }
         }
 
-        private (SKPoint location, SKSize size) GetBarDrawingProperties(float headerHeight, SKSize itemSize, SKSize barSize, float origin, float barX, float barY)
+        private (Point location, Size size) GetBarDrawingProperties(float headerHeight, Size itemSize, Size barSize, float origin, float barX, float barY)
         {
-            var x = barX - (itemSize.Width / 2);
-            var y = Math.Min(origin, barY);
+            double x = barX - (itemSize.Width / 2);
+            double y = Math.Min(origin, barY);
             var height = Math.Max(MinBarHeight, Math.Abs(origin - barY));
             if (height < MinBarHeight)
             {
                 height = MinBarHeight;
-                if (y + height > Margin + itemSize.Height)
+                if (y + height > Control.Margin + itemSize.Height)
                 {
                     y = headerHeight + itemSize.Height - height;
                 }
             }
 
-            return (new SKPoint(x, y), new SKSize(barSize.Width, height));
+            return (new Point(x, y), new Size(barSize.Width, height));
         }
 
         /// <inheritdoc />
@@ -108,7 +102,7 @@ namespace Microcharts
                 using (var paint = new SKPaint
                 {
                     Style = SKPaintStyle.Fill,
-                    Color = color.WithAlpha((byte)(this.BarAreaAlpha * this.AnimationProgress)),
+                    Color = color.WithA((byte)(this.BarAreaAlpha * this.AnimationProgress)),
                 })
                 {
                     var max = value > 0 ? headerHeight : headerHeight + itemSize.Height;
@@ -118,7 +112,5 @@ namespace Microcharts
                 }
             }
         }
-
-        #endregion
     }
 }

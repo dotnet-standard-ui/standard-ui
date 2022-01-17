@@ -14,7 +14,9 @@ namespace Microcharts
     /// </summary>
     public class HalfRadialGaugeChart : SimpleChart
     {
-        #region Properties
+        public HalfRadialGaugeChart(IChart control) : base(control)
+        {
+        }
 
         /// <summary>
         /// Gets or sets the size of each gauge. If negative, then its will be calculated from the available space.
@@ -34,14 +36,12 @@ namespace Microcharts
         /// <value>The start angle.</value>
         public float StartAngle { get; set; } = -90;
 
-        private float AbsoluteMinimum => Entries?.Where(x => x.Value.HasValue).Select(x => x.Value.Value).Concat(new[] { MaxValue, MinValue, InternalMinValue ?? 0 }).Min(x => Math.Abs(x)) ?? 0;
+        private float AbsoluteMinimum => Control.Entries?.Where(x => x.Value.HasValue).Select(x => x.Value.Value).Concat(new[] { MaxValue, MinValue, InternalMinValue ?? 0 }).Min(x => Math.Abs(x)) ?? 0;
 
-        private float AbsoluteMaximum => Entries?.Where(x => x.Value.HasValue).Select(x => x.Value.Value).Concat(new[] { MaxValue, MinValue, InternalMinValue ?? 0 }).Max(x => Math.Abs(x)) ?? 0;
+        private float AbsoluteMaximum => Control.Entries?.Where(x => x.Value.HasValue).Select(x => x.Value.Value).Concat(new[] { MaxValue, MinValue, InternalMinValue ?? 0 }).Max(x => Math.Abs(x)) ?? 0;
 
         /// <inheritdoc />
         protected override float ValueRange => AbsoluteMaximum - AbsoluteMinimum;
-
-        #endregion
 
         #region Methods
 

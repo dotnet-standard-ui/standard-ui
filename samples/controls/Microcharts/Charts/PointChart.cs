@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.StandardUI;
 using SkiaSharp;
 
 namespace Microcharts
@@ -11,16 +12,12 @@ namespace Microcharts
     /// </summary>
     public class PointChart : AxisBasedChart
     {
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Microcharts.PointSeriesChart"/> class.
         /// </summary>
-        public PointChart() : base()
+        public PointChart(IChart control) : base(control)
         {
         }
-
-        #endregion
 
         #region Properties
 
@@ -44,8 +41,6 @@ namespace Microcharts
 
         #endregion
 
-        #region Methods
-
         /// <inheritdoc />
         protected override void DrawValueLabel(SKCanvas canvas, Dictionary<ChartEntry, SKRect> valueLabelSizes, float headerWithLegendHeight, SKSize itemSize, SKSize barSize, ChartEntry entry, float barX, float barY, float itemX, float origin)
         {
@@ -63,17 +58,17 @@ namespace Microcharts
         }
 
         /// <inheritdoc />
-        protected override void DrawBar(ChartSerie serie, SKCanvas canvas, float headerHeight, float itemX, SKSize itemSize, SKSize barSize, float origin, float barX, float barY, SKColor color)
+        protected override void DrawBar(ChartSeries serie, SKCanvas canvas, float headerHeight, float itemX, Size itemSize, Size barSize, float origin, float barX, float barY, Color color)
         {
             if (PointMode != PointMode.None)
             {
-                var point = new SKPoint(barX - (itemSize.Width / 2) + (barSize.Width / 2), barY);
+                var point = new Point(barX - (itemSize.Width / 2) + (barSize.Width / 2), barY);
                 canvas.DrawPoint(point, color, PointSize, PointMode);
             }
         }
 
         /// <inheritdoc />
-        protected override void DrawBarArea(SKCanvas canvas, float headerHeight, SKSize itemSize, SKSize barSize, SKColor color, float origin, float value, float barX, float barY)
+        protected override void DrawBarArea(SKCanvas canvas, float headerHeight, Size itemSize, Size barSize, Color color, float origin, float value, float barX, float barY)
         {
             if (PointAreaAlpha > 0)
             {
@@ -92,7 +87,5 @@ namespace Microcharts
                 }
             }
         }
-
-        #endregion
     }
 }

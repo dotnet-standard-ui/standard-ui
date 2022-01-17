@@ -1,12 +1,17 @@
 using System.Collections.Generic;
 
 namespace Microcharts
-{
     /// <summary>
+{
     /// Base class of simple chart
     /// </summary>
     public abstract class SimpleChart : Chart
     {
+        public SimpleChart(IChart control) : base(control)
+        {
+        }
+
+#if false
         /// <summary>
         /// Gets or Sets Entries
         /// </summary>
@@ -16,5 +21,6 @@ namespace Microcharts
             get => entries;
             set => UpdateEntries(value);
         }
+#endif
     }
 }
