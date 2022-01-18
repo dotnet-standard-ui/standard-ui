@@ -63,7 +63,7 @@ namespace Microcharts
 
         #region Methods
 
-        public override void DrawContent(SKCanvas canvas, int width, int height)
+        public override void DrawContent(ICanvas canvas, int width, int height)
         {
             var total = Entries?.Count() ?? 0;
 
@@ -202,7 +202,7 @@ namespace Microcharts
             return center + rotation.MapPoint(point);
         }
 
-        private void DrawBorder(SKCanvas canvas, SKPoint center, float radius)
+        private void DrawBorder(ICanvas canvas, SKPoint center, float radius)
         {
             using (var paint = new SKPaint()
             {

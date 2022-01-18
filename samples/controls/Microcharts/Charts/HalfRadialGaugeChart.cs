@@ -3,6 +3,8 @@
 
 using System;
 using System.Linq;
+using Microsoft.StandardUI;
+using Microsoft.StandardUI.Controls;
 using SkiaSharp;
 
 namespace Microcharts
@@ -45,14 +47,14 @@ namespace Microcharts
 
         #region Methods
 
-        public void DrawGaugeArea(SKCanvas canvas, ChartEntry entry, float radius, int cx, int cy, float strokeWidth)
+        public void DrawGaugeArea(ICanvas canvas, ChartEntry entry, float radius, int cx, int cy, float strokeWidth)
         {
             using (var paint = new SKPaint
             {
                 Style = SKPaintStyle.Stroke,
                 StrokeWidth = strokeWidth,
                 StrokeCap = SKStrokeCap.Round,
-                Color = entry.Color.WithAlpha(LineAreaAlpha),
+                Color = entry.Color.WithA(LineAreaAlpha),
                 IsAntialias = true,
             })
             {
@@ -64,7 +66,7 @@ namespace Microcharts
             }
         }
 
-        public void DrawGauge(SKCanvas canvas, SKColor color, float value, float radius, int cx, int cy, float strokeWidth)
+        public void DrawGauge(ICanvas canvas, Color color, float value, float radius, int cx, int cy, float strokeWidth)
         {
             using (var paint = new SKPaint
             {
@@ -84,7 +86,7 @@ namespace Microcharts
             }
         }
 
-        public override void DrawContent(SKCanvas canvas, int width, int height)
+        public override void DrawContent(ICanvas canvas, int width, int height)
         {
             if (Entries != null)
             {
@@ -115,10 +117,12 @@ namespace Microcharts
             }
         }
 
-        private void DrawCaption(SKCanvas canvas, int width, int height)
+        private void DrawCaption(ICanvas canvas, int width, int height)
         {
-            var rightValues = Entries.Take(Entries.Count() / 2).ToList();
-            var leftValues = Entries.Skip(rightValues.Count()).ToList();
+            var entries = Control.Entries;
+
+            var rightValues = entries.Take(entries.Count() / 2).ToList();
+            var leftValues = entries.Skip(rightValues.Count()).ToList();
 
             leftValues.Reverse();
 

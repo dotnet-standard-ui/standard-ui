@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.StandardUI;
+using Microsoft.StandardUI.Controls;
 using SkiaSharp;
 
 namespace Microcharts
@@ -31,7 +32,7 @@ namespace Microcharts
 
             YAxisLinesPaint = new SKPaint
             {
-                Color = SKColors.Black.WithA(0x50),
+                Color = Colors.Black.WithA(0x50),
                 IsAntialias = true,
                 Style = SKPaintStyle.Stroke
             };
@@ -61,7 +62,7 @@ namespace Microcharts
         /// <param name="canvas">The output canvas.</param>
         /// <param name="width">The width of the chart.</param>
         /// <param name="height">The height of the chart.</param>
-        public override void DrawContent(SKCanvas canvas, int width, int height)
+        public override void DrawContent(ICanvas canvas, int width, int height)
         {
             if (Control.Series != null && Control.Entries != null)
             {
@@ -99,14 +100,14 @@ namespace Microcharts
 
                 var itemSize = CalculateItemSize(nbItems, width, height, footerHeight + headerHeight + legendHeight);
                 var barSize = CalculateBarSize(itemSize, Series.Count());
-                var origin = CalculateYOrigin(itemSize.Height, headerWithLegendHeight, maxValue, minValue, valRange);
+                var origin = CalculateYOrigin((float)itemSize.Height, headerWithLegendHeight, maxValue, minValue, valRange);
                 DrawHelper.DrawYAxis(Control.ShowYAxisText, Control.ShowYAxisLines, Control.YAxisPosition, Control.YAxisTextPaint, Control.YAxisLinesPaint, Control.Margin, AnimationProgress, maxValue, valRange, canvas, width, yAxisXShift, yAxisIntervalLabels, headerHeight, itemSize, origin);
 
                 int nbSeries = series.Count();
                 for (int serieIndex = 0; serieIndex < nbSeries; serieIndex++)
                 {
-                    ChartSeries serie = Series.ElementAt(serieIndex);
-                    IEnumerable<ChartEntry> entries = serie.Entries;
+                    ChartSeries series = Series.ElementAt(serieIndex);
+                    IEnumerable<ChartEntry> entries = series.Entries;
                     int entryCount = entries.Count();
 
                     for (int i = 0; i < labels.Length; i++)
@@ -116,8 +117,8 @@ namespace Microcharts
                         string label = labels[i];
                         if (!string.IsNullOrEmpty(label))
                         {
-                            SKRect labelSize = labelSizes[i];
-                            DrawHelper.DrawLabel(canvas, Control.LabelOrientation, YPositionBehavior.None, itemSize, new SKPoint(itemX, height - footerWithLegendHeight + Control.Margin), Control.LabelColor, labelSize, label, LabelTextSize, Typeface);
+                            Rect labelSize = labelSizes[i];
+                            DrawHelper.DrawLabel(canvas, Control.LabelOrientation, YPositionBehavior.None, itemSize, new Point(itemX, height - footerWithLegendHeight + Control.Margin), Control.LabelColor, labelSize, label, LabelTextSize, Typeface);
                         }
                     }
 
@@ -133,16 +134,16 @@ namespace Microcharts
                             float value = entry.Value.Value;
                             float marge = serieIndex < nbSeries ? Control.Margin / 2 : 0;
                             float totalBarMarge = serieIndex * Control.Margin / 2;
-                            float barX = itemX + serieIndex * barSize.Width + totalBarMarge;
-                            float barY = headerWithLegendHeight + ((1 - AnimationProgress) * (origin - headerWithLegendHeight) + (((maxValue - value) / valRange) * itemSize.Height) * AnimationProgress);
+                            double barX = itemX + serieIndex * barSize.Width + totalBarMarge;
+                            double barY = headerWithLegendHeight + ((1 - AnimationProgress) * (origin - headerWithLegendHeight) + (((maxValue - value) / valRange) * itemSize.Height) * AnimationProgress);
 
-                            DrawBarArea(canvas, headerWithLegendHeight, itemSize, barSize, serie.Color ?? entry.Color, origin, value, barX, barY);
-                            DrawBar(serie, canvas, headerWithLegendHeight, itemX, itemSize, barSize, origin, barX, barY, serie.Color ?? entry.Color);
+                            DrawBarArea(canvas, headerWithLegendHeight, itemSize, barSize, series.Color ?? entry.Color, origin, value, barX, barY);
+                            DrawBar(series, canvas, headerWithLegendHeight, itemX, itemSize, barSize, origin, barX, barY, series.Color ?? entry.Color);
                             DrawValueLabel(canvas, valueLabelSizes, headerWithLegendHeight, itemSize, barSize, entry, barX, barY, itemX, origin);
                         }
                         else
                         {
-                            DrawNullPoint(serie, canvas);
+                            DrawNullPoint(series, canvas);
                         }
                     }
                 }
@@ -165,7 +166,7 @@ namespace Microcharts
         /// <summary>
         /// Draw the value label of the corresponding entry on the canvas
         /// </summary>
-        protected virtual void DrawValueLabel(SKCanvas canvas, Dictionary<ChartEntry, Rect> valueLabelSizes, float headerWithLegendHeight, Size itemSize, Size barSize, ChartEntry entry, float barX, float barY, float itemX, float origin)
+        protected virtual void DrawValueLabel(ICanvas canvas, Dictionary<ChartEntry, Rect> valueLabelSizes, float headerWithLegendHeight, Size itemSize, Size barSize, ChartEntry entry, float barX, float barY, float itemX, float origin)
         {
             string label = entry?.ValueLabel;
             if (!string.IsNullOrEmpty(label))
@@ -180,11 +181,11 @@ namespace Microcharts
         /// <param name="itemSize">size of an item (per label)</param>
         /// <param name="origin">the calculated y origin</param>
         /// <param name="valueLabelSizes">Value label size by entry</param>
-        protected virtual void OnDrawContentEnd(SKCanvas canvas, SKSize itemSize, float origin, Dictionary<ChartEntry, SKRect> valueLabelSizes)
+        protected virtual void OnDrawContentEnd(ICanvas canvas, Size itemSize, float origin, Dictionary<ChartEntry, Rect> valueLabelSizes)
         {
         }
 
-        private void DrawLegend(SKCanvas canvas, SKRect[] seriesNameSize, float legendHeight, float height, float width)
+        private void DrawLegend(ICanvas canvas, Rect[] seriesNameSize, float legendHeight, float height, float width)
         {
             if (Control.LegendOption == SeriesLegendOption.None)
                 return;
@@ -206,7 +207,7 @@ namespace Microcharts
                 var serie = series[i];
                 var seriesBound = seriesNameSize[i];
 
-                float legentItemWidth = Control.Margin + Control.SeriesLabelTextSize + Control.Margin + seriesBound.Width;
+                float legentItemWidth = (float) (Control.Margin + Control.SeriesLabelTextSize + Control.Margin + seriesBound.Width);
                 if (legentItemWidth > width)
                 {
                     if (currentWidthUsed != 0)
@@ -231,7 +232,7 @@ namespace Microcharts
 
         }
 
-        private float GenerateSeriesLegend(SKCanvas canvas, float lineHeight, float origin, int nbLine, float currentWidthUsed, ChartSeries series)
+        private float GenerateSeriesLegend(ICanvas canvas, float lineHeight, float origin, int nbLine, float currentWidthUsed, ChartSeries series)
         {
             var legendColor = series.Color.Value.WithA((byte)(series.Color.Value.A * AnimationProgress));
             var lblColor = Control.LabelColor.WithA((byte)(Control.LabelColor.A * AnimationProgress));
@@ -309,22 +310,22 @@ namespace Microcharts
             return headerHeight + ((max / range) * itemHeight);
         }
 
-        private Dictionary<ChartEntry, SKRect> MeasureValueLabels()
+        private Dictionary<ChartEntry, Rect> MeasureValueLabels()
         {
-            var dict = new Dictionary<ChartEntry, SKRect>();
+            var dict = new Dictionary<ChartEntry, Rect>();
             using (var paint = new SKPaint())
             {
                 paint.TextSize = Control.ValueLabelTextSize;
                 foreach (var e in Control.Entries)
                 {
-                    SKRect bounds;
+                    Rect bounds;
                     if (string.IsNullOrEmpty(e.ValueLabel))
                     {
-                        bounds = SKRect.Empty;
+                        bounds = Rect.Empty;
                     }
                     else
                     {
-                        bounds = new SKRect();
+                        bounds = new Rect();
                         paint.MeasureText(e.ValueLabel, ref bounds);
                     }
 
@@ -338,17 +339,17 @@ namespace Microcharts
         /// <summary>
         /// Draw bar (or point) item of an entry
         /// </summary>
-        protected abstract void DrawBar(ChartSeries serie, SKCanvas canvas, float headerHeight, float itemX, Size itemSize, Size barSize, float origin, float barX, float barY, Color color);
+        protected abstract void DrawBar(ChartSeries serie, ICanvas canvas, float headerHeight, float itemX, Size itemSize, Size barSize, float origin, float barX, float barY, Color color);
 
         /// <summary>
         /// Called during the draw cycle when encountering a point with a null value
         /// </summary>
-        protected virtual void DrawNullPoint(ChartSeries serie, SKCanvas canvas) { }
+        protected virtual void DrawNullPoint(ChartSeries serie, ICanvas canvas) { }
 
         /// <summary>
         /// Draw bar (or point) area of an entry
         /// </summary>
-        protected abstract void DrawBarArea(SKCanvas canvas, float headerHeight, Size itemSize, Size barSize, Color color, float origin, float value, float barX, float barY);
+        protected abstract void DrawBarArea(ICanvas canvas, float headerHeight, Size itemSize, Size barSize, Color color, float origin, float value, float barX, float barY);
 
         private Size CalculateBarSize(Size itemSize, int barPerItems)
         {

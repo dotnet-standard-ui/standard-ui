@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.StandardUI;
 using SkiaSharp;
 
 namespace Microcharts
@@ -10,7 +11,7 @@ namespace Microcharts
         /// Measures the text values.
         /// </summary>
         /// <returns>The texts bounds.</returns>
-        internal static SKRect[] MeasureTexts(string[] texts, float textSize)
+        internal static Rect[] MeasureTexts(string[] texts, float textSize)
         {
             using (var paint = new SKPaint())
             {
@@ -23,7 +24,7 @@ namespace Microcharts
         /// Measures the text values.
         /// </summary>
         /// <returns>The texts bounds.</returns>
-        internal static SKRect[] MeasureTexts(string[] texts, SKPaint paint)
+        internal static Rect[] MeasureTexts(string[] texts, SKPaint paint)
         {
             return texts.Select(text =>
             {
@@ -46,7 +47,7 @@ namespace Microcharts
         /// <param name="textSize">the text size</param>
         /// <param name="textSizes">text sizes</param>
         /// <param name="orientation">orientation of content</param>
-        internal static float CalculateFooterHeaderHeight(float margin, float textSize, SKRect[] textSizes, Orientation orientation)
+        internal static float CalculateFooterHeaderHeight(float margin, float textSize, Rect[] textSizes, Orientation orientation)
         {
             var result = margin;
             if (textSizes.Any(l => !l.IsEmpty))

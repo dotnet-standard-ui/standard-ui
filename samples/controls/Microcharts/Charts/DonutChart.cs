@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.StandardUI.Controls;
 using SkiaSharp;
 
 namespace Microcharts
@@ -37,7 +38,7 @@ namespace Microcharts
 
         #region Methods
 
-        public override void DrawContent(SKCanvas canvas, int width, int height)
+        public override void DrawContent(ICanvas canvas, int width, int height)
         {
             if (Entries != null)
             {
@@ -87,7 +88,7 @@ namespace Microcharts
             }
         }
 
-        private void DrawCaption(SKCanvas canvas, int width, int height)
+        private void DrawCaption(ICanvas canvas, int width, int height)
         {
             var isGraphCentered = GraphPosition == GraphPosition.Center;
             var sumValue = Entries.Where( x => x.Value.HasValue ).Sum(x => Math.Abs(x.Value.Value));
@@ -107,7 +108,7 @@ namespace Microcharts
             }
         }
 
-        private void DrawCaptionLeftAndRight(SKCanvas canvas, int width, int height, bool isGraphCentered)
+        private void DrawCaptionLeftAndRight(ICanvas canvas, int width, int height, bool isGraphCentered)
         {
             var sumValue = Entries.Where(x => x.Value.HasValue).Sum(x => Math.Abs(x.Value.Value));
             var rightValues = new List<ChartEntry>();

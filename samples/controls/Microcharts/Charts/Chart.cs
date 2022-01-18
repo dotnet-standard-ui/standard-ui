@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.StandardUI;
 using Microsoft.StandardUI.Controls;
 using SkiaSharp;
 
@@ -33,6 +34,8 @@ namespace Microcharts
         {
             Control = control;
         }
+
+        public float AnimationProgress => 1.0f;
 
 #if false
         /// <summary>
@@ -141,7 +144,7 @@ namespace Microcharts
         /// <param name="canvas">The canvas.</param>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
-        public void Draw(SKCanvas canvas, int width, int height)
+        public void Draw(ICanvas canvas, int width, int height)
         {
             DrawableChartArea = new SKRect(0, 0, width, height);
 
@@ -164,7 +167,7 @@ namespace Microcharts
         /// <param name="canvas">The canvas.</param>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
-        public abstract void DrawContent(SKCanvas canvas, int width, int height);
+        public abstract void DrawContent(ICanvas canvas, int width, int height);
 
         /// <summary>
         /// Draws caption elements on the right or left side of the chart.
@@ -175,7 +178,7 @@ namespace Microcharts
         /// <param name="entries">The entries.</param>
         /// <param name="isLeft">If set to <c>true</c> is left.</param>
         /// <param name="isGraphCentered">Should the chart in the center always?</param>
-        protected void DrawCaptionElements(SKCanvas canvas, int width, int height, List<ChartEntry> entries,
+        protected void DrawCaptionElements(ICanvas canvas, int width, int height, List<ChartEntry> entries,
             bool isLeft, bool isGraphCentered)
         {
             var totalMargin = 2 * Control.Margin;
@@ -243,14 +246,14 @@ namespace Microcharts
 
                     if (isLeft)
                     {
-                        DrawableChartArea = new SKRect(Math.Max(DrawableChartArea.Left, labelBounds.Right), 0,
+                        DrawableChartArea = new Rect(Math.Max(DrawableChartArea.Left, labelBounds.Right), 0,
                             DrawableChartArea.Right, DrawableChartArea.Bottom);
                     }
                     else
                     {
                         // Draws the chart centered for right labelmode only
                         var left = isGraphCentered == true ? Math.Abs(width - DrawableChartArea.Right) : 0;
-                        DrawableChartArea = new SKRect(left, 0, Math.Min(DrawableChartArea.Right, labelBounds.Left),
+                        DrawableChartArea = new Rect(left, 0, Math.Min(DrawableChartArea.Right, labelBounds.Left),
                             DrawableChartArea.Bottom);
                     }
 
