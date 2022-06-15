@@ -17,7 +17,9 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild. We need to use
     # msbuild instead of "dotnet build" due to this issue https://github.com/microsoft/WindowsAppSDK/issues/1652
