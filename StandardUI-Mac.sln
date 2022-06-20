@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandardUI.SourceGenerator"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandardUI.Mac", "src\Microsoft.StandardUI.Mac\Microsoft.StandardUI.Mac.csproj", "{0743C3F9-AE96-4477-89E0-C2D203C65F8C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandardUI.XamarinForms", "src\StandardUI.XamarinForms\StandardUI.XamarinForms.csproj", "{39EA40A7-8C25-4E76-8903-E8A55F577FDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
