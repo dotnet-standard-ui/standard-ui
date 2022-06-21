@@ -6,11 +6,10 @@ namespace Microsoft.StandardUI.SourceGenerator.UIFrameworks
         {
         }
 
-        public override string ProjectBaseDirectory => "StandardUI.WinUI";
+        public override string ProjectBaseDirectory => "Microsoft.StandardUI.WinUI";
         public override string RootNamespace => "Microsoft.StandardUI.WinUI";
-        public override string? DependencyPropertyTypeAlias => "DependencyProperty = Microsoft.UI.Xaml.DependencyProperty";
-        public override string DependencyPropertyType => "DependencyProperty";
-        public override string ContentPropertyAttributeNamespace => "Microsoft.UI.Xaml.Markup";
+        public override TypeName DependencyPropertyType => new("Microsoft.UI.Xaml", "DependencyProperty");
+        public override TypeName ContentPropertyAttribute => new("Microsoft.UI.Xaml.Markup", "ContentPropertyAttribute");
 
         public override string FrameworkTypeForUIElementAttachedTarget => "Microsoft.UI.Xaml.FrameworkElement";
         public override string ToFrameworkTypeForUIElementAttachedTarget => "ToFrameworkElement";
@@ -22,7 +21,7 @@ namespace Microsoft.StandardUI.SourceGenerator.UIFrameworks
         {
             if (intface.ContentPropertyName != null)
             {
-                classSource.Attributes.Usings.AddNamespace(ContentPropertyAttributeNamespace);
+                classSource.Attributes.Usings.AddNamespace(ContentPropertyAttribute.Namespace);
                 classSource.Attributes.AddLine($"[ContentProperty(Name = \"{intface.ContentPropertyName}\")]");
             }
         }

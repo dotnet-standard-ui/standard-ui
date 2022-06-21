@@ -40,6 +40,11 @@ namespace Microsoft.StandardUI.SourceGenerator
             _typeAliases.Add(alias);
         }
 
+        public void AddType(TypeName typeName)
+        {
+            _typeAliases.Add($"{typeName.Name} = {typeName.FullName}");
+        }
+
         public Source Generate()
         {
             Source source = new Source(Context);

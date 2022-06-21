@@ -8,9 +8,8 @@ namespace Microsoft.StandardUI.SourceGenerator.UIFrameworks
         {
         }
         public abstract string ToFrameworkTypeForUIElementAttachedTarget { get; }
-        public virtual string? DependencyPropertyTypeAlias => null;
-        public abstract string DependencyPropertyType { get; }
-        public abstract string ContentPropertyAttributeNamespace { get; }
+        public abstract TypeName DependencyPropertyType { get; }
+        public abstract TypeName ContentPropertyAttribute { get; }
 
         public override string UIElementCollectionOutputTypeName(ITypeSymbol elementType) => $"UIElementCollection<{NativeUIElementType},{elementType}>";
         public override string UIElementSubtypeCollectionOutputTypeName(ITypeSymbol elementType) => $"UIElementCollection<{OutputTypeName(elementType)},{elementType.Name}>";
@@ -19,23 +18,21 @@ namespace Microsoft.StandardUI.SourceGenerator.UIFrameworks
         {
             if (intface.ContentPropertyName != null)
             {
-                classSource.Attributes.Usings.AddNamespace(ContentPropertyAttributeNamespace);
+                classSource.Attributes.Usings.AddNamespace(ContentPropertyAttribute.Namespace);
                 classSource.Attributes.AddLine($"[ContentProperty(\"{intface.ContentPropertyName}\")]");
             }
         }
 
         public override void GenerateProperty(Property property, ClassSource classSource)
         {
-            string? usingTypeAlias = DependencyPropertyTypeAlias;
-            if (usingTypeAlias != null)
-                classSource.Usings.AddTypeAlias(usingTypeAlias);
+            classSource.Usings.AddType(DependencyPropertyType);
 
             // Generate the property descriptor
             string nonNullablePropertyType = Utils.ToNonnullableType(PropertyOutputTypeName(property));
             string descriptorName = PropertyDescriptorName(property);
             string defaultValue = DefaultValue(property);
             classSource.StaticFields.AddLine(
-                $"public static readonly {DependencyPropertyType} {descriptorName} = PropertyUtils.Register(nameof({property.Name}), typeof({nonNullablePropertyType}), typeof({property.Interface.FrameworkClassName}), {defaultValue});");
+                $"public static readonly {DependencyPropertyType.Name} {descriptorName} = PropertyUtils.Register(nameof({property.Name}), typeof({nonNullablePropertyType}), typeof({property.Interface.FrameworkClassName}), {defaultValue});");
 
             if (property.IsUICollection)
             {
@@ -160,9 +157,7 @@ namespace Microsoft.StandardUI.SourceGenerator.UIFrameworks
 
         public override void GenerateAttachedProperty(AttachedProperty attachedProperty, ClassSource mainClassSource, ClassSource attachedClassSource)
         {
-            string? usingTypeAlias = DependencyPropertyTypeAlias;
-            if (usingTypeAlias != null)
-                mainClassSource.Usings.AddTypeAlias(usingTypeAlias);
+            mainClassSource.Usings.AddType(DependencyPropertyType);
 
             string parameterAsAttachedTargetType = Utils.IsThisType(attachedProperty.TargetType, KnownTypes.IUIElement) ?
                 $"{attachedProperty.TargetParameterName}.{ToFrameworkTypeForUIElementAttachedTarget}()" :
@@ -175,7 +170,7 @@ namespace Microsoft.StandardUI.SourceGenerator.UIFrameworks
             string defaultValue = DefaultValue(attachedProperty);
 
             mainClassSource.StaticFields.AddLine(
-                $"public static readonly {DependencyPropertyType} {descriptorName} = PropertyUtils.RegisterAttached(\"{attachedProperty.Name}\", typeof({nonNullablePropertyType}), typeof({targetOutputTypeName}), {defaultValue});");
+                $"public static readonly {DependencyPropertyType.Name} {descriptorName} = PropertyUtils.RegisterAttached(\"{attachedProperty.Name}\", typeof({nonNullablePropertyType}), typeof({targetOutputTypeName}), {defaultValue});");
 
             mainClassSource.StaticMethods.AddBlankLineIfNonempty();
             mainClassSource.StaticMethods.AddLine($"public static {propertyOutputTypeName} Get{attachedProperty.Name}({targetOutputTypeName} {attachedProperty.TargetParameterName}) => ({propertyOutputTypeName}) {attachedProperty.TargetParameterName}.GetValue({descriptorName});");

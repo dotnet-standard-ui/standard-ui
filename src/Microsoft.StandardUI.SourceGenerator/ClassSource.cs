@@ -1,4 +1,4 @@
-﻿using Microsoft.StandardUI.SourceGenerator.UIFrameworks;
+using Microsoft.StandardUI.SourceGenerator.UIFrameworks;
 
 namespace Microsoft.StandardUI.SourceGenerator
 {
@@ -13,7 +13,7 @@ namespace Microsoft.StandardUI.SourceGenerator
         public Source Attributes { get; }
         public string NamespaceName { get; }
         public string ClassName { get; }
-        public string DerivedFrom { get; set; }
+        public string? DerivedFrom { get; set; }
 
         public Source StaticFields { get; }
         public Source NonstaticFields { get; }
@@ -94,8 +94,13 @@ namespace Microsoft.StandardUI.SourceGenerator
 
                 if (! Attributes.IsEmpty)
                     fileSource.AddSource(Attributes);
-                fileSource.AddLines(
-                    $"public class {ClassName} : {DerivedFrom}",
+                if (DerivedFrom != null)
+                    fileSource.AddLine(
+                        $"public class {ClassName} : {DerivedFrom}");
+                else
+                    fileSource.AddLine(
+                        $"public class {ClassName}");
+                fileSource.AddLine(
                     "{");
                 using (fileSource.Indent())
                     fileSource.AddSource(classBody);

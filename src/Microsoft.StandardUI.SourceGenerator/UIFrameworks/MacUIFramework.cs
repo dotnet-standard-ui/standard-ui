@@ -6,7 +6,7 @@ namespace Microsoft.StandardUI.SourceGenerator.UIFrameworks
         {
         }
 
-        public override string ProjectBaseDirectory => "StandardUI.Mac";
+        public override string ProjectBaseDirectory => "Microsoft.StandardUI.Mac";
         public override string RootNamespace => "Microsoft.StandardUI.Mac";
         public override string FrameworkTypeForUIElementAttachedTarget => "StandardUIElement";
         public override string NativeUIElementType => "AppKit.NSView";
