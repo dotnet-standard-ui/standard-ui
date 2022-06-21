@@ -1,10 +1,8 @@
 // This file is generated from IVisualStateManager.cs. Update the source file to change its contents.
 
-using Xamarin.Forms;
-
-namespace Microsoft.StandardUI.XamarinForms
+namespace Microsoft.StandardUI.Maui
 {
-    public class VisualStateManager : StandardUIBindableObject, IVisualStateManager
+    public class VisualStateManager : IVisualStateManager
     {
     }
 }

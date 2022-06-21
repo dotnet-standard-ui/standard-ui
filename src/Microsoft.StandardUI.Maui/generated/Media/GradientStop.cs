@@ -1,24 +1,24 @@
 // This file is generated from IGradientStop.cs. Update the source file to change its contents.
 
 using Microsoft.StandardUI.Media;
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms.Media
+namespace Microsoft.StandardUI.Maui.Media
 {
-    public class GradientStop : StandardUIBindableObject, IGradientStop
+    public class GradientStop : StandardUIObject, IGradientStop
     {
-        public static readonly BindableProperty ColorProperty = PropertyUtils.Register(nameof(Color), typeof(ColorXamarinForms), typeof(GradientStop), ColorXamarinForms.Default);
+        public static readonly BindableProperty ColorProperty = PropertyUtils.Register(nameof(Color), typeof(ColorMaui), typeof(GradientStop), ColorMaui.Default);
         public static readonly BindableProperty OffsetProperty = PropertyUtils.Register(nameof(Offset), typeof(double), typeof(GradientStop), 0.0);
         
-        public ColorXamarinForms Color
+        public ColorMaui Color
         {
-            get => (ColorXamarinForms) GetValue(ColorProperty);
+            get => (ColorMaui) GetValue(ColorProperty);
             set => SetValue(ColorProperty, value);
         }
         Color IGradientStop.Color
         {
             get => Color.Color;
-            set => Color = new ColorXamarinForms(value);
+            set => Color = new ColorMaui(value);
         }
         
         public double Offset

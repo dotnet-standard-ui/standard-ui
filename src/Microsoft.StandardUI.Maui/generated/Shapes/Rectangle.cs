@@ -1,9 +1,9 @@
 // This file is generated from IRectangle.cs. Update the source file to change its contents.
 
 using Microsoft.StandardUI.Shapes;
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms.Shapes
+namespace Microsoft.StandardUI.Maui.Shapes
 {
     public class Rectangle : Shape, IRectangle
     {
@@ -21,7 +21,5 @@ namespace Microsoft.StandardUI.XamarinForms.Shapes
             get => (double) GetValue(RadiusYProperty);
             set => SetValue(RadiusYProperty, value);
         }
-        
-        public override void Draw(IDrawingContext drawingContext) => drawingContext.DrawRectangle(this);
     }
 }

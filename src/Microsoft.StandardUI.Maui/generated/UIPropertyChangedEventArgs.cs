@@ -1,10 +1,8 @@
 // This file is generated from IUIPropertyChangedEventArgs.cs. Update the source file to change its contents.
 
-using Xamarin.Forms;
-
-namespace Microsoft.StandardUI.XamarinForms
+namespace Microsoft.StandardUI.Maui
 {
-    public class UIPropertyChangedEventArgs : StandardUIBindableObject, IUIPropertyChangedEventArgs
+    public class UIPropertyChangedEventArgs : IUIPropertyChangedEventArgs
     {
     }
 }

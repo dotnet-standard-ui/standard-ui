@@ -1,23 +1,25 @@
 // This file is generated from IPanel.cs. Update the source file to change its contents.
 
+using Microsoft.Maui.Controls;
 using Microsoft.StandardUI.Controls;
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms.Controls
+namespace Microsoft.StandardUI.Maui.Controls
 {
-    public class Panel : StandardUIView, IPanel
+    [ContentProperty("Children")]
+    public class Panel : BuiltInUIElement, IPanel
     {
-        public static readonly BindableProperty ChildrenProperty = PropertyUtils.Register(nameof(Children), typeof(UIElementCollection), typeof(Panel), null);
+        public static readonly BindableProperty ChildrenProperty = PropertyUtils.Register(nameof(Children), typeof(UIElementCollection<Microsoft.Maui.Controls.View,Microsoft.StandardUI.IUIElement>), typeof(Panel), null);
         
-        private UIElementCollection _uiElementCollection;
+        private UIElementCollection<Microsoft.Maui.Controls.View,Microsoft.StandardUI.IUIElement> _children;
         
         public Panel()
         {
-            _uiElementCollection = new UIElementCollection(this);
-            SetValue(ChildrenProperty, _uiElementCollection);
+            _children = new UIElementCollection<Microsoft.Maui.Controls.View,Microsoft.StandardUI.IUIElement>(this);
+            SetValue(ChildrenProperty, _children);
         }
         
-        public UIElementCollection Children => _uiElementCollection;
-        IUIElementCollection IPanel.Children => Children;
+        public UIElementCollection<Microsoft.Maui.Controls.View,Microsoft.StandardUI.IUIElement> Children => _children;
+        IUICollection<IUIElement> IPanel.Children => Children.ToStandardUIElementCollection();
     }
 }

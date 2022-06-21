@@ -2,14 +2,14 @@
 
 using Microsoft.StandardUI.Media;
 using Microsoft.StandardUI.Shapes;
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms.Shapes
+namespace Microsoft.StandardUI.Maui.Shapes
 {
     public class Polyline : Shape, IPolyline
     {
         public static readonly BindableProperty FillRuleProperty = PropertyUtils.Register(nameof(FillRule), typeof(FillRule), typeof(Polyline), FillRule.EvenOdd);
-        public static readonly BindableProperty PointsProperty = PropertyUtils.Register(nameof(Points), typeof(PointsXamarinForms), typeof(Polyline), PointsXamarinForms.Default);
+        public static readonly BindableProperty PointsProperty = PropertyUtils.Register(nameof(Points), typeof(PointsMaui), typeof(Polyline), PointsMaui.Default);
         
         public FillRule FillRule
         {
@@ -17,17 +17,15 @@ namespace Microsoft.StandardUI.XamarinForms.Shapes
             set => SetValue(FillRuleProperty, value);
         }
         
-        public PointsXamarinForms Points
+        public PointsMaui Points
         {
-            get => (PointsXamarinForms) GetValue(PointsProperty);
+            get => (PointsMaui) GetValue(PointsProperty);
             set => SetValue(PointsProperty, value);
         }
         Points IPolyline.Points
         {
             get => Points.Points;
-            set => Points = new PointsXamarinForms(value);
+            set => Points = new PointsMaui(value);
         }
-        
-        public override void Draw(IDrawingContext drawingContext) => drawingContext.DrawPolyline(this);
     }
 }

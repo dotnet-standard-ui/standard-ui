@@ -1,10 +1,10 @@
 // This file is generated from ITargetPropertyPath.cs. Update the source file to change its contents.
 
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms
+namespace Microsoft.StandardUI.Maui
 {
-    public class TargetPropertyPath : StandardUIBindableObject, ITargetPropertyPath
+    public class TargetPropertyPath : StandardUIObject, ITargetPropertyPath
     {
         public static readonly BindableProperty PropertyProperty = PropertyUtils.Register(nameof(Property), typeof(PropertyPath), typeof(TargetPropertyPath), null);
         public static readonly BindableProperty TargetProperty = PropertyUtils.Register(nameof(Target), typeof(object), typeof(TargetPropertyPath), null);

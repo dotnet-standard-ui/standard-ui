@@ -1,10 +1,10 @@
 // This file is generated from ISetter.cs. Update the source file to change its contents.
 
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms
+namespace Microsoft.StandardUI.Maui
 {
-    public class Setter : UIPropertyObject, ISetter
+    public class Setter : StandardUIObject, ISetter
     {
         public static readonly BindableProperty PropertyProperty = PropertyUtils.Register(nameof(Property), typeof(UIProperty), typeof(Setter), null);
         public static readonly BindableProperty TargetProperty = PropertyUtils.Register(nameof(Target), typeof(TargetPropertyPath), typeof(Setter), null);

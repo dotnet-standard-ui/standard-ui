@@ -1,25 +1,25 @@
 // This file is generated from IVisualState.cs. Update the source file to change its contents.
 
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms
+namespace Microsoft.StandardUI.Maui
 {
-    public class VisualState : UIPropertyObject, IVisualState
+    public class VisualState : StandardUIObject, IVisualState
     {
         public static readonly BindableProperty NameProperty = PropertyUtils.Register(nameof(Name), typeof(string), typeof(VisualState), "");
-        public static readonly BindableProperty SettersProperty = PropertyUtils.Register(nameof(Setters), typeof(SetterCollection), typeof(VisualState), null);
+        public static readonly BindableProperty SettersProperty = PropertyUtils.Register(nameof(Setters), typeof(UICollection<ISetter>), typeof(VisualState), null);
         
-        private SetterCollection _setterCollection;
+        private UICollection<ISetter> _setters;
         
         public VisualState()
         {
-            _setterCollection = new SetterCollection();
-            SetValue(SettersProperty, _setterCollection);
+            _setters = new UICollection<ISetter>(this);
+            SetValue(SettersProperty, _setters);
         }
         
         public string Name => (string) GetValue(NameProperty);
         
-        public SetterCollection Setters => _setterCollection;
-        ISetterCollection IVisualState.Setters => Setters;
+        public UICollection<ISetter> Setters => _setters;
+        IUICollection<ISetter> IVisualState.Setters => Setters;
     }
 }

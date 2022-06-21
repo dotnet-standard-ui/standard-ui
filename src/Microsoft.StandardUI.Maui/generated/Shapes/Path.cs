@@ -1,11 +1,11 @@
 // This file is generated from IPath.cs. Update the source file to change its contents.
 
 using Microsoft.StandardUI.Media;
-using Microsoft.StandardUI.XamarinForms.Media;
+using Microsoft.StandardUI.Maui.Media;
 using Microsoft.StandardUI.Shapes;
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms.Shapes
+namespace Microsoft.StandardUI.Maui.Shapes
 {
     public class Path : Shape, IPath
     {
@@ -21,7 +21,5 @@ namespace Microsoft.StandardUI.XamarinForms.Shapes
             get => Data;
             set => Data = (Geometry) value;
         }
-        
-        public override void Draw(IDrawingContext drawingContext) => drawingContext.DrawPath(this);
     }
 }

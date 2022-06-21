@@ -2,9 +2,9 @@
 
 using System.Collections.Generic;
 using Microsoft.StandardUI.Media;
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms.Media
+namespace Microsoft.StandardUI.Maui.Media
 {
     public class TransformGroup : Transform, ITransformGroup
     {

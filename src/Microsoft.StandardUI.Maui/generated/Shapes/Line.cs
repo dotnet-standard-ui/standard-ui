@@ -1,9 +1,9 @@
 // This file is generated from ILine.cs. Update the source file to change its contents.
 
 using Microsoft.StandardUI.Shapes;
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms.Shapes
+namespace Microsoft.StandardUI.Maui.Shapes
 {
     public class Line : Shape, ILine
     {
@@ -35,7 +35,5 @@ namespace Microsoft.StandardUI.XamarinForms.Shapes
             get => (double) GetValue(Y2Property);
             set => SetValue(Y2Property, value);
         }
-        
-        public override void Draw(IDrawingContext drawingContext) => drawingContext.DrawLine(this);
     }
 }

@@ -1,33 +1,37 @@
 // This file is generated from IPathFigure.cs. Update the source file to change its contents.
 
-using System.Collections.Generic;
 using Microsoft.StandardUI.Media;
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms.Media
+namespace Microsoft.StandardUI.Maui.Media
 {
-    public class PathFigure : StandardUIBindableObject, IPathFigure
+    public class PathFigure : StandardUIObject, IPathFigure
     {
-        public static readonly BindableProperty SegmentsProperty = PropertyUtils.Register(nameof(Segments), typeof(IEnumerable<IPathSegment>), typeof(PathFigure), null);
-        public static readonly BindableProperty StartPointProperty = PropertyUtils.Register(nameof(StartPoint), typeof(PointXamarinForms), typeof(PathFigure), PointXamarinForms.Default);
+        public static readonly BindableProperty SegmentsProperty = PropertyUtils.Register(nameof(Segments), typeof(UICollection<IPathSegment>), typeof(PathFigure), null);
+        public static readonly BindableProperty StartPointProperty = PropertyUtils.Register(nameof(StartPoint), typeof(PointMaui), typeof(PathFigure), PointMaui.Default);
         public static readonly BindableProperty IsClosedProperty = PropertyUtils.Register(nameof(IsClosed), typeof(bool), typeof(PathFigure), false);
         public static readonly BindableProperty IsFilledProperty = PropertyUtils.Register(nameof(IsFilled), typeof(bool), typeof(PathFigure), true);
         
-        public IEnumerable<IPathSegment> Segments
+        private UICollection<IPathSegment> _segments;
+        
+        public PathFigure()
         {
-            get => (IEnumerable<IPathSegment>) GetValue(SegmentsProperty);
-            set => SetValue(SegmentsProperty, value);
+            _segments = new UICollection<IPathSegment>(this);
+            SetValue(SegmentsProperty, _segments);
         }
         
-        public PointXamarinForms StartPoint
+        public UICollection<IPathSegment> Segments => _segments;
+        IUICollection<IPathSegment> IPathFigure.Segments => Segments;
+        
+        public PointMaui StartPoint
         {
-            get => (PointXamarinForms) GetValue(StartPointProperty);
+            get => (PointMaui) GetValue(StartPointProperty);
             set => SetValue(StartPointProperty, value);
         }
         Point IPathFigure.StartPoint
         {
             get => StartPoint.Point;
-            set => StartPoint = new PointXamarinForms(value);
+            set => StartPoint = new PointMaui(value);
         }
         
         public bool IsClosed

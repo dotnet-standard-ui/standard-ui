@@ -1,23 +1,23 @@
 // This file is generated from IPolyQuadraticBezierSegment.cs. Update the source file to change its contents.
 
 using Microsoft.StandardUI.Media;
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms.Media
+namespace Microsoft.StandardUI.Maui.Media
 {
     public class PolyQuadraticBezierSegment : PathSegment, IPolyQuadraticBezierSegment
     {
-        public static readonly BindableProperty PointsProperty = PropertyUtils.Register(nameof(Points), typeof(PointsXamarinForms), typeof(PolyQuadraticBezierSegment), PointsXamarinForms.Default);
+        public static readonly BindableProperty PointsProperty = PropertyUtils.Register(nameof(Points), typeof(PointsMaui), typeof(PolyQuadraticBezierSegment), PointsMaui.Default);
         
-        public PointsXamarinForms Points
+        public PointsMaui Points
         {
-            get => (PointsXamarinForms) GetValue(PointsProperty);
+            get => (PointsMaui) GetValue(PointsProperty);
             set => SetValue(PointsProperty, value);
         }
         Points IPolyQuadraticBezierSegment.Points
         {
             get => Points.Points;
-            set => Points = new PointsXamarinForms(value);
+            set => Points = new PointsMaui(value);
         }
     }
 }

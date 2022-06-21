@@ -1,18 +1,17 @@
 // This file is generated from ICanvas.cs. Update the source file to change its contents.
 
 using Microsoft.StandardUI.Controls;
-using Xamarin.Forms;
 
-namespace Microsoft.StandardUI.XamarinForms.Controls
+namespace Microsoft.StandardUI.Maui.Controls
 {
     public class CanvasAttached : ICanvasAttached
     {
         public static CanvasAttached Instance = new CanvasAttached();
         
-        public double GetLeft(IUIElement element) => Canvas.GetLeft((VisualElement) element);
-        public void SetLeft(IUIElement element, double value) => Canvas.SetLeft((VisualElement) element, value);
+        public double GetLeft(IUIElement element) => Canvas.GetLeft(element.ToView());
+        public void SetLeft(IUIElement element, double value) => Canvas.SetLeft(element.ToView(), value);
         
-        public double GetTop(IUIElement element) => Canvas.GetTop((VisualElement) element);
-        public void SetTop(IUIElement element, double value) => Canvas.SetTop((VisualElement) element, value);
+        public double GetTop(IUIElement element) => Canvas.GetTop(element.ToView());
+        public void SetTop(IUIElement element, double value) => Canvas.SetTop(element.ToView(), value);
     }
 }

@@ -1,36 +1,36 @@
 // This file is generated from IRadialGradientBrush.cs. Update the source file to change its contents.
 
 using Microsoft.StandardUI.Media;
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms.Media
+namespace Microsoft.StandardUI.Maui.Media
 {
     public class RadialGradientBrush : GradientBrush, IRadialGradientBrush
     {
-        public static readonly BindableProperty CenterProperty = PropertyUtils.Register(nameof(Center), typeof(PointXamarinForms), typeof(RadialGradientBrush), PointXamarinForms.CenterDefault);
-        public static readonly BindableProperty GradientOriginProperty = PropertyUtils.Register(nameof(GradientOrigin), typeof(PointXamarinForms), typeof(RadialGradientBrush), PointXamarinForms.CenterDefault);
+        public static readonly BindableProperty CenterProperty = PropertyUtils.Register(nameof(Center), typeof(PointMaui), typeof(RadialGradientBrush), PointMaui.CenterDefault);
+        public static readonly BindableProperty GradientOriginProperty = PropertyUtils.Register(nameof(GradientOrigin), typeof(PointMaui), typeof(RadialGradientBrush), PointMaui.CenterDefault);
         public static readonly BindableProperty RadiusXProperty = PropertyUtils.Register(nameof(RadiusX), typeof(double), typeof(RadialGradientBrush), 0.5);
         
-        public PointXamarinForms Center
+        public PointMaui Center
         {
-            get => (PointXamarinForms) GetValue(CenterProperty);
+            get => (PointMaui) GetValue(CenterProperty);
             set => SetValue(CenterProperty, value);
         }
         Point IRadialGradientBrush.Center
         {
             get => Center.Point;
-            set => Center = new PointXamarinForms(value);
+            set => Center = new PointMaui(value);
         }
         
-        public PointXamarinForms GradientOrigin
+        public PointMaui GradientOrigin
         {
-            get => (PointXamarinForms) GetValue(GradientOriginProperty);
+            get => (PointMaui) GetValue(GradientOriginProperty);
             set => SetValue(GradientOriginProperty, value);
         }
         Point IRadialGradientBrush.GradientOrigin
         {
             get => GradientOrigin.Point;
-            set => GradientOrigin = new PointXamarinForms(value);
+            set => GradientOrigin = new PointMaui(value);
         }
         
         public double RadiusX

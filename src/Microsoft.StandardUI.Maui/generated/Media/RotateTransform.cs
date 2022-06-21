@@ -1,9 +1,9 @@
 // This file is generated from IRotateTransform.cs. Update the source file to change its contents.
 
 using Microsoft.StandardUI.Media;
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
 
-namespace Microsoft.StandardUI.XamarinForms.Media
+namespace Microsoft.StandardUI.Maui.Media
 {
     public class RotateTransform : Transform, IRotateTransform
     {

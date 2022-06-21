@@ -1,11 +1,10 @@
 // This file is generated from IControlTemplate.cs. Update the source file to change its contents.
 
 using Microsoft.StandardUI.Controls;
-using Xamarin.Forms;
 
-namespace Microsoft.StandardUI.XamarinForms.Controls
+namespace Microsoft.StandardUI.Maui.Controls
 {
-    public class ControlTemplate : StandardUIBindableObject, IControlTemplate
+    public class ControlTemplate : IControlTemplate
     {
     }
 }

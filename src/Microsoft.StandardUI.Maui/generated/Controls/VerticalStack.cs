@@ -1,11 +1,10 @@
 // This file is generated from IVerticalStack.cs. Update the source file to change its contents.
 
 using Microsoft.StandardUI.Controls;
-using Xamarin.Forms;
 
-namespace Microsoft.StandardUI.XamarinForms.Controls
+namespace Microsoft.StandardUI.Maui.Controls
 {
-    public partial class VerticalStack : Panel, IVerticalStack
+    public class VerticalStack : StackBase, IVerticalStack
     {
     }
 }

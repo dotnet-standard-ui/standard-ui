@@ -1,14 +1,14 @@
 // This file is generated from IShape.cs. Update the source file to change its contents.
 
 using Microsoft.StandardUI.Media;
-using Microsoft.StandardUI.XamarinForms.Media;
-using Brush = Microsoft.StandardUI.XamarinForms.Media.Brush;
+using Microsoft.StandardUI.Maui.Media;
 using Microsoft.StandardUI.Shapes;
-using Xamarin.Forms;
+using BindableProperty = Microsoft.Maui.Controls.BindableProperty;
+using Brush = Microsoft.StandardUI.Maui.Media.Brush;
 
-namespace Microsoft.StandardUI.XamarinForms.Shapes
+namespace Microsoft.StandardUI.Maui.Shapes
 {
-    public class Shape : StandardUIView, IShape
+    public class Shape : BuiltInUIElement, IShape
     {
         public static readonly BindableProperty FillProperty = PropertyUtils.Register(nameof(Fill), typeof(Brush), typeof(Shape), null);
         public static readonly BindableProperty StrokeProperty = PropertyUtils.Register(nameof(Stroke), typeof(Brush), typeof(Shape), null);

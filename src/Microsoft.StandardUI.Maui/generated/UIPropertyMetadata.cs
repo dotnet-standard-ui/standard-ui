@@ -1,10 +1,8 @@
 // This file is generated from IUIPropertyMetadata.cs. Update the source file to change its contents.
 
-using Xamarin.Forms;
-
-namespace Microsoft.StandardUI.XamarinForms
+namespace Microsoft.StandardUI.Maui
 {
-    public class UIPropertyMetadata : StandardUIBindableObject, IUIPropertyMetadata
+    public class UIPropertyMetadata : IUIPropertyMetadata
     {
     }
 }
