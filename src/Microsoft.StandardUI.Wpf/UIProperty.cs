@@ -11,9 +11,7 @@ namespace Microsoft.StandardUI.Wpf
             DependencyProperty = property;
         }
 
-        public static DependencyProperty GetDependencyProeprty(IUIProperty property)
-        {
-            return ((UIProperty)property).DependencyProperty;
-        }
+        public static DependencyProperty GetDependencyProperty(IUIProperty property) =>
+            ((UIProperty)property).DependencyProperty;
     }
 }

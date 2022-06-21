@@ -4,9 +4,8 @@ namespace Microsoft.StandardUI.Wpf
 {
     public static class VerticalAlignmentExtensions
     {
-        public static System.Windows.VerticalAlignment ToWpfVerticalAlignment(this VerticalAlignment verticalAlignment)
-        {
-            return verticalAlignment switch
+        public static System.Windows.VerticalAlignment ToWpfVerticalAlignment(this VerticalAlignment verticalAlignment) =>
+            verticalAlignment switch
             {
                 VerticalAlignment.Top => System.Windows.VerticalAlignment.Top,
                 VerticalAlignment.Center => System.Windows.VerticalAlignment.Center,
@@ -14,11 +13,9 @@ namespace Microsoft.StandardUI.Wpf
                 VerticalAlignment.Stretch => System.Windows.VerticalAlignment.Stretch,
                 _ => throw new ArgumentOutOfRangeException(nameof(verticalAlignment), $"Invalid VerticalAlignment value: {verticalAlignment}"),
             };
-        }
 
-        public static VerticalAlignment FromWpfVerticalAlignment(this System.Windows.VerticalAlignment verticalAlignment)
-        {
-            return verticalAlignment switch
+        public static VerticalAlignment ToStandardUIVerticalAlignment(this System.Windows.VerticalAlignment verticalAlignment) =>
+            verticalAlignment switch
             {
                 System.Windows.VerticalAlignment.Top => VerticalAlignment.Top,
                 System.Windows.VerticalAlignment.Center => VerticalAlignment.Center,
@@ -26,6 +23,5 @@ namespace Microsoft.StandardUI.Wpf
                 System.Windows.VerticalAlignment.Stretch => VerticalAlignment.Stretch,
                 _ => throw new ArgumentOutOfRangeException(nameof(verticalAlignment), $"Invalid VerticalAlignment value: {verticalAlignment}"),
             };
-        }
     }
 }

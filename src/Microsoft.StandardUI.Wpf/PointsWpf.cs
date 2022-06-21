@@ -1,6 +1,5 @@
-﻿using Microsoft.StandardUI.Wpf.Converters;
+using Microsoft.StandardUI.Wpf.Converters;
 using System.ComponentModel;
-
 
 namespace Microsoft.StandardUI.Wpf
 {
@@ -8,7 +7,6 @@ namespace Microsoft.StandardUI.Wpf
     public struct PointsWpf
     {
         public static readonly PointsWpf Default = new PointsWpf(Points.Default);
-
 
         public Points Points { get; }
 

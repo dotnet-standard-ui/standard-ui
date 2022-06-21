@@ -1,4 +1,4 @@
-﻿using Microsoft.StandardUI.Controls;
+using Microsoft.StandardUI.Controls;
 using Microsoft.StandardUI.Wpf.NativeVisualFramework;
 using System;
 using System.Windows.Media;
@@ -71,7 +71,7 @@ namespace Microsoft.StandardUI.Wpf
 
         VerticalAlignment IUIElement.VerticalAlignment
         {
-            get => VerticalAlignmentExtensions.FromWpfVerticalAlignment(this.VerticalAlignment);
+            get => this.VerticalAlignment.ToStandardUIVerticalAlignment();
             set => this.VerticalAlignment = value.ToWpfVerticalAlignment();
         }
 

@@ -29,19 +29,19 @@ namespace Microsoft.StandardUI.Wpf
 
         HorizontalAlignment IUIElement.HorizontalAlignment
         {
-            get => HorizontalAlignmentExtensions.ToStandardUIHorizontalAlignment(HorizontalAlignment);
+            get => HorizontalAlignment.ToStandardUIHorizontalAlignment();
             set => HorizontalAlignment = value.ToWpfHorizontalAlignment();
         }
 
         VerticalAlignment IUIElement.VerticalAlignment
         {
-            get => VerticalAlignmentExtensions.FromWpfVerticalAlignment(VerticalAlignment);
+            get => VerticalAlignment.ToStandardUIVerticalAlignment();
             set => VerticalAlignment = value.ToWpfVerticalAlignment();
         }
 
         FlowDirection IUIElement.FlowDirection
         {
-            get => FlowDirectionExtensions.ToStandardUIFlowDirection(FlowDirection);
+            get => FlowDirection.ToStandardUIFlowDirection();
             set => FlowDirection = value.ToWpfFlowDirection();
         }
 

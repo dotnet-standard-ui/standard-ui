@@ -42,7 +42,7 @@ namespace Microsoft.StandardUI.Wpf
 
         VerticalAlignment IUIElement.VerticalAlignment
         {
-            get => _frameworkElement.VerticalAlignment.FromWpfVerticalAlignment();
+            get => _frameworkElement.VerticalAlignment.ToStandardUIVerticalAlignment();
             set => _frameworkElement.VerticalAlignment = value.ToWpfVerticalAlignment();
         }
 
