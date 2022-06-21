@@ -1,20 +1,20 @@
-﻿using System.ComponentModel;
-using Microsoft.StandardUI.XamarinForms.Converters;
+using System.ComponentModel;
+using Microsoft.StandardUI.Maui.Converters;
 
-namespace Microsoft.StandardUI.XamarinForms
+namespace Microsoft.StandardUI.Maui
 {
     [TypeConverter(typeof(ColorTypeConverter))]
-    public struct ColorXamarinForms
+    public struct ColorMaui
     {
-        public static readonly ColorXamarinForms Default = new ColorXamarinForms(Microsoft.StandardUI.Color.Default);
-        public static readonly ColorXamarinForms Transparent = new ColorXamarinForms(Colors.Transparent);
+        public static readonly ColorMaui Default = new ColorMaui(Microsoft.StandardUI.Color.Default);
+        public static readonly ColorMaui Transparent = new ColorMaui(Colors.Transparent);
 
-        public static ColorXamarinForms FromColor(Color color) => new ColorXamarinForms(color);
+        public static ColorMaui FromColor(Color color) => new ColorMaui(color);
 
         // Auto properties
         public Color Color { get; }
 
-        public ColorXamarinForms(Color color)
+        public ColorMaui(Color color)
         {
             Color = color;
         }

@@ -2,12 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
 
-namespace Microsoft.StandardUI.XamarinForms
+namespace Microsoft.StandardUI.Maui
 {
-    public class UIElementCollection : IUIElementCollection
+    public class UIElementCollection<TNativeUIElment, TStandardUIElement> : IList<TNativeUIElment>
+        where TNativeUIElment : View where TStandardUIElement : IUIElement
     {
+        public UIElementCollection(Element parent)
+        {
+        }
+
+        public IUICollection<TStandardUIElement> ToStandardUIElementCollection() => throw new NotImplementedException();
+
+#if TODO
         private ObservableCollection<Xamarin.Forms.Element> _collection;
 
         public UIElementCollection(Xamarin.Forms.Element parent)
@@ -78,6 +86,85 @@ namespace Microsoft.StandardUI.XamarinForms
             public bool MoveNext() => _enumerator.MoveNext();
 
             public void Reset() => _enumerator.Reset();
+        }
+#endif
+        TNativeUIElment IList<TNativeUIElment>.this[int index]
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        int ICollection<TNativeUIElment>.Count
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        bool ICollection<TNativeUIElment>.IsReadOnly
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        void ICollection<TNativeUIElment>.Add(TNativeUIElment item)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ICollection<TNativeUIElment>.Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ICollection<TNativeUIElment>.Contains(TNativeUIElment item)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ICollection<TNativeUIElment>.CopyTo(TNativeUIElment[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator<TNativeUIElment> IEnumerable<TNativeUIElment>.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        int IList<TNativeUIElment>.IndexOf(TNativeUIElment item)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IList<TNativeUIElment>.Insert(int index, TNativeUIElment item)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ICollection<TNativeUIElment>.Remove(TNativeUIElment item)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IList<TNativeUIElment>.RemoveAt(int index)
+        {
+            throw new NotImplementedException();
         }
     }
 }

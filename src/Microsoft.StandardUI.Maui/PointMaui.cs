@@ -1,20 +1,21 @@
-﻿using System.ComponentModel;
-using Microsoft.StandardUI.XamarinForms.Converters;
+using System.ComponentModel;
+using Microsoft.Maui.Controls;
+using Microsoft.StandardUI.Maui.Converters;
 
-namespace Microsoft.StandardUI.XamarinForms
+namespace Microsoft.StandardUI.Maui
 {
     [TypeConverter(typeof(PointTypeConverter))]
-    public struct PointXamarinForms
-
+    public struct PointMaui
     {
-        public static readonly PointXamarinForms Default = new PointXamarinForms(Point.Default);
-        public static readonly PointXamarinForms CenterDefault = new PointXamarinForms(Point.CenterDefault);
-
+        public static readonly PointMaui Default = new PointMaui(Point.Default);
+        public static readonly PointMaui CenterDefault = new PointMaui(Point.CenterDefault);
 
         public Point Point { get; }
 
-        public PointXamarinForms(Point point)
+        public PointMaui(Point point)
         {
+            Label label;
+
             Point = point;
         }
     }

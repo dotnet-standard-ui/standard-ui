@@ -1,6 +1,6 @@
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
 
-namespace Microsoft.StandardUI.XamarinForms
+namespace Microsoft.StandardUI.Maui
 {
     public class UIProperty : IUIProperty
     {
@@ -11,9 +11,7 @@ namespace Microsoft.StandardUI.XamarinForms
             BindableProperty = property;
         }
 
-        public static BindableProperty GetBindableProperty(IUIProperty property)
-        {
-            return ((UIProperty)property).BindableProperty;
-        }
+        public static BindableProperty GetBindableProperty(IUIProperty property) =>
+            ((UIProperty)property).BindableProperty;
     }
 }

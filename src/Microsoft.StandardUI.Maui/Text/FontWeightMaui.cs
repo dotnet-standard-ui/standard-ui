@@ -1,17 +1,17 @@
-﻿using Microsoft.StandardUI.Text;
+using Microsoft.StandardUI.Text;
 
-namespace Microsoft.StandardUI.XamarinForms.Text
+namespace Microsoft.StandardUI.Maui.Text
 {
-    public struct FontWeightXamarinForms
+    public struct FontWeightMaui
     {
-        public static readonly FontWeightXamarinForms Default = new FontWeightXamarinForms(FontWeights.Normal);
+        public static readonly FontWeightMaui Default = new FontWeightMaui(FontWeights.Normal);
 
-        public static FontWeightXamarinForms FromFontWeight(FontWeight fontWeight) => new FontWeightXamarinForms(fontWeight);
+        public static FontWeightMaui FromFontWeight(FontWeight fontWeight) => new FontWeightMaui(fontWeight);
 
         // Auto properties
         public FontWeight FontWeight { get; }
 
-        public FontWeightXamarinForms(FontWeight fontWeight)
+        public FontWeightMaui(FontWeight fontWeight)
         {
             FontWeight = fontWeight;
         }

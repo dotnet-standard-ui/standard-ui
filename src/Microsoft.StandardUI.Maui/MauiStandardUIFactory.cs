@@ -1,20 +1,29 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.StandardUI.Controls;
 using Microsoft.StandardUI.Media;
 using Microsoft.StandardUI.Shapes;
-using Microsoft.StandardUI.XamarinForms.Controls;
-using Microsoft.StandardUI.XamarinForms.Media;
-using Microsoft.StandardUI.XamarinForms.Shapes;
+using Microsoft.StandardUI.Maui.Controls;
+using Microsoft.StandardUI.Maui.Media;
+using Microsoft.StandardUI.Maui.Shapes;
 
-namespace Microsoft.StandardUI.XamarinForms
+namespace Microsoft.StandardUI.Maui
 {
-    internal class XamarinFormsStandardUIFactory : IStandardUIFactory
+    internal class StandardUIFactory : IStandardUIFactory
     {
         /*** UI Elements ***/
 
         public ICanvas CreateCanvas() => new Canvas();
-        public ICanvasAttached CanvasAttached => Controls.CanvasAttached.Instance;
+        public ICanvasAttached CanvasAttachedInstance => CanvasAttached.Instance;
+
+        public IGridAttached GridAttachedInstance
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public IStackPanel CreateStackPanel() => new StackPanel();
         public IGrid CreateGrid() => new Grid();
 
@@ -48,5 +57,25 @@ namespace Microsoft.StandardUI.XamarinForms
         public IUIPropertyMetadata CreatePropertyMetadata(object defaultValue) => throw new NotImplementedException();
         public IUIPropertyMetadata CreatePropertyMetadata(object defaultValue, UIPropertyChangedCallback propertyChangedCallback) => throw new NotImplementedException();
         public IUIProperty RegisterUIProperty(string name, Type propertyType, Type ownerType, IUIPropertyMetadata typeMetadata) => throw new NotImplementedException();
+
+        public IVerticalStack CreateVerticalStack()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IHorizontalStack CreateHorizontalStack()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IRowDefinition CreateRowDefinition()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IColumnDefinition CreateColumnDefinition()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,18 +1,16 @@
 using Microsoft.StandardUI.Converters;
-using Microsoft.StandardUI.XamarinForms.Media;
+using Microsoft.StandardUI.Maui.Media;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace Microsoft.StandardUI.XamarinForms.Converters
+namespace Microsoft.StandardUI.Maui.Converters
 {
 	public class BrushTypeConverter : TypeConverterBase
 	{
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object valueObject)
-        {
-            return new SolidColorBrush
+        public override object ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object valueObject) =>
+            new SolidColorBrush
             {
-                Color = new ColorXamarinForms(ColorConverter.ConvertFromString(GetValueAsString(valueObject)))
+                Color = new ColorMaui(ColorConverter.ConvertFromString(GetValueAsString(valueObject)))
             };
-        }
 	}
 }

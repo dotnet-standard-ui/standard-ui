@@ -1,18 +1,16 @@
-﻿using Microsoft.StandardUI.XamarinForms.Converters;
+using Microsoft.StandardUI.Maui.Converters;
 using System.ComponentModel;
 
-
-namespace Microsoft.StandardUI.XamarinForms
+namespace Microsoft.StandardUI.Maui
 {
     [TypeConverter(typeof(PointsTypeConverter))]
-    public struct PointsXamarinForms
+    public struct PointsMaui
     {
-        public static readonly PointsXamarinForms Default = new PointsXamarinForms(Points.Default);
-
+        public static readonly PointsMaui Default = new PointsMaui(Points.Default);
 
         public Points Points { get; }
 
-        public PointsXamarinForms(Points points)
+        public PointsMaui(Points points)
         {
             Points = points;
         }

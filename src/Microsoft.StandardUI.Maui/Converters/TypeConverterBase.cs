@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace Microsoft.StandardUI.XamarinForms.Converters
+namespace Microsoft.StandardUI.Maui.Converters
 {
 	public class TypeConverterBase : TypeConverter
 	{
