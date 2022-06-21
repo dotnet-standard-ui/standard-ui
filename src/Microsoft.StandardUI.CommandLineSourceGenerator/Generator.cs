@@ -28,8 +28,7 @@ namespace Microsoft.StandardUI.CommandLineSourceGenerator
             // Print message for WorkspaceFailed event to help diagnosing project load failures.
             workspace.WorkspaceFailed += (o, e) => Console.WriteLine(e.Diagnostic.Message);
 
-
-            string standardUIProjectPath = Path.Combine(rootDirectory, "src", "StandardUI", "StandardUI.csproj");
+            string standardUIProjectPath = Path.Combine(rootDirectory, "src", "Microsoft.StandardUI", "Microsoft.StandardUI.csproj");
             Console.WriteLine($"Loading project '{standardUIProjectPath}'");
 
             // Attach progress reporter so we print projects as they are loaded.
@@ -92,7 +91,8 @@ namespace Microsoft.StandardUI.CommandLineSourceGenerator
             var wpfUIFramework = new WpfUIFramework(context);
             var winUIUIFramework = new WinUIUIFramework(context);
             var winFormsUIFramework = new WinFormsUIFramework(context);
-            var macUIUIFramework = new MacUIFramework(context);
+            var macUIFramework = new MacUIFramework(context);
+            var mauiUIFramework = new MauiUIFramework(context);
 
             foreach (INamedTypeSymbol interfaceType in gatherInterfacesToGenerateFrom.Interfaces)
             {
@@ -102,7 +102,8 @@ namespace Microsoft.StandardUI.CommandLineSourceGenerator
                 intface.Generate(wpfUIFramework);
                 intface.Generate(winUIUIFramework);
                 intface.Generate(winFormsUIFramework);
-                intface.Generate(macUIUIFramework);
+                intface.Generate(macUIFramework);
+                intface.Generate(mauiUIFramework);
                 intface.GenerateExtensionsClass();
             }
         }
