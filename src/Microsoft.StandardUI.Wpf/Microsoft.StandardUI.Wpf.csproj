@@ -6,6 +6,9 @@
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>Microsoft.StandardUI.Wpf</RootNamespace>
+
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Microsoft.StandardUI.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

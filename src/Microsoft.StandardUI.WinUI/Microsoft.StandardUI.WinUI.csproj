@@ -7,6 +7,9 @@
     <UseWinUI>true</UseWinUI>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
+
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Microsoft.StandardUI.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

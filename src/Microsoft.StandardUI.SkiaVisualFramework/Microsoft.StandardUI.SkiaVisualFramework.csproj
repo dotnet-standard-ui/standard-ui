@@ -2,8 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-	  <LangVersion>9.0</LangVersion>
-	  <Nullable>enable</Nullable>
+	<LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Microsoft.StandardUI.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

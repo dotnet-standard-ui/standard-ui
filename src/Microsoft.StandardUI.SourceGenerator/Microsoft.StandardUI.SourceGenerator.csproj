@@ -6,6 +6,9 @@
 	<Nullable>enable</Nullable>
 	<IsRoslynComponent>true</IsRoslynComponent>
 	<RootNamespace>Microsoft.StandardUI.SourceGenerator</RootNamespace>
+    
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Microsoft.StandardUI.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
