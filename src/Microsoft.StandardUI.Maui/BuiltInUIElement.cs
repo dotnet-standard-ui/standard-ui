@@ -27,6 +27,12 @@ namespace Microsoft.StandardUI.Maui
 
         double IUIElement.ActualY => throw new NotImplementedException();
 
+        Thickness IUIElement.Margin
+        {
+            get => Margin.ToStandardUIThickness();
+            set => Margin = value.ToMauiThickness();
+        }
+
         HorizontalAlignment IUIElement.HorizontalAlignment
         {
             get => HorizontalOptions.Alignment.ToStandardUIHorizontalAlignment();

@@ -63,22 +63,28 @@ namespace Microsoft.StandardUI.Wpf
 
         double IUIElement.ActualY => throw new NotImplementedException();
 
+        Thickness IUIElement.Margin
+        {
+            get => Margin.ToStandardUIThickness();
+            set => Margin = value.ToWpfThickness();
+        }
+
         HorizontalAlignment IUIElement.HorizontalAlignment
         {
-            get => HorizontalAlignmentExtensions.ToStandardUIHorizontalAlignment(this.HorizontalAlignment);
-            set => this.HorizontalAlignment = value.ToWpfHorizontalAlignment();
+            get => HorizontalAlignment.ToStandardUIHorizontalAlignment();
+            set => HorizontalAlignment = value.ToWpfHorizontalAlignment();
         }
 
         VerticalAlignment IUIElement.VerticalAlignment
         {
-            get => this.VerticalAlignment.ToStandardUIVerticalAlignment();
-            set => this.VerticalAlignment = value.ToWpfVerticalAlignment();
+            get => VerticalAlignment.ToStandardUIVerticalAlignment();
+            set => VerticalAlignment = value.ToWpfVerticalAlignment();
         }
 
         FlowDirection IUIElement.FlowDirection
         {
-            get => FlowDirectionExtensions.ToStandardUIFlowDirection(this.FlowDirection);
-            set => this.FlowDirection = value.ToWpfFlowDirection();
+            get => FlowDirection.ToStandardUIFlowDirection();
+            set => FlowDirection = value.ToWpfFlowDirection();
         }
 
         // TODO: Error if appropriate when set to Visibility.Hidden

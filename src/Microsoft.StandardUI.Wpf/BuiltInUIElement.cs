@@ -27,6 +27,12 @@ namespace Microsoft.StandardUI.Wpf
 
         double IUIElement.ActualY => throw new NotImplementedException();
 
+        Thickness IUIElement.Margin
+        {
+            get => Margin.ToStandardUIThickness();
+            set => Margin = value.ToWpfThickness();
+        }
+
         HorizontalAlignment IUIElement.HorizontalAlignment
         {
             get => HorizontalAlignment.ToStandardUIHorizontalAlignment();

@@ -64,6 +64,12 @@ namespace Microsoft.StandardUI.WinUI
 
         double IUIElement.ActualY => throw new NotImplementedException();
 
+        Thickness IUIElement.Margin
+        {
+            get => Margin.ToStandardUIThickness();
+            set => Margin = value.ToWinUIThickness();
+        }
+
         HorizontalAlignment IUIElement.HorizontalAlignment
         {
             get => HorizontalAlignmentExtensions.FromWinUIHorizontalAlignment(this.HorizontalAlignment);

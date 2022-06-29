@@ -48,6 +48,11 @@ namespace Microsoft.StandardUI
         public double MaxHeight { get; set; }
 
         /// <summary>
+        /// The outer margin of the element, the distance between it and its adjacent elements
+        /// </summary>
+        public Thickness Margin { get; set; }
+
+        /// <summary>
         /// The Vertical alignment characteristics that are applied to this UIElement when it is composed in a layout parent, such as a panel or items control.
         /// </summary>
         [DefaultValue(VerticalAlignment.Stretch)]

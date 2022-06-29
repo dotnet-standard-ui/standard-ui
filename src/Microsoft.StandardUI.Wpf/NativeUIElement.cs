@@ -34,6 +34,12 @@ namespace Microsoft.StandardUI.Wpf
 
         double IUIElement.ActualY => throw new NotImplementedException();
 
+        Thickness IUIElement.Margin
+        {
+            get => _frameworkElement.Margin.ToStandardUIThickness();
+            set => _frameworkElement.Margin = value.ToWpfThickness();
+        }
+
         HorizontalAlignment IUIElement.HorizontalAlignment
         {
             get => _frameworkElement.HorizontalAlignment.ToStandardUIHorizontalAlignment();
@@ -92,7 +98,7 @@ namespace Microsoft.StandardUI.Wpf
         double IUIElement.MaxHeight
         {
             get => _frameworkElement.MaxHeight;
-            set => _frameworkElement.MinHeight = value;
+            set => _frameworkElement.MaxHeight = value;
         }
 
         double IUIElement.ActualWidth => _frameworkElement.ActualWidth;
