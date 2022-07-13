@@ -19,10 +19,9 @@ namespace Microsoft.StandardUI.SourceGenerator.UIFrameworks
         public abstract string RootNamespace { get; }
         public abstract string FrameworkTypeForUIElementAttachedTarget { get; }
         public abstract string NativeUIElementType { get; }
-        public virtual string BuiltInUIElementBaseClassNamespaceName => RootNamespace;
-        public virtual string BuiltInUIElementBaseClassName => "BuiltInUIElement";
-        public virtual string BuiltInUIObjectBaseClassNamespaceName => RootNamespace;
-        public virtual string BuiltInUIObjectBaseClassName => "StandardUIObject";
+        public virtual TypeName BuiltInUIElementBaseClassType => new(RootNamespace, "BuiltInUIElement");
+        public virtual TypeName BuiltInUIObjectBaseClassType => new(RootNamespace, "StandardUIObject");
+        public virtual TypeName StandardControlBaseClassType => new(RootNamespace, "StandardControl");
 
         public virtual string PropertyDescriptorName(Property property) => property.Name + "Property";
         public virtual string PropertyDescriptorName(AttachedProperty property) => property.Name + "Property";
@@ -60,13 +59,18 @@ namespace Microsoft.StandardUI.SourceGenerator.UIFrameworks
             string destinationTypeName;
             if (Utils.IsThisType(type, KnownTypes.IUIObject))
             {
-                destinationTypeName = BuiltInUIObjectBaseClassName;
-                usings?.AddNamespace(BuiltInUIObjectBaseClassNamespaceName);
+                destinationTypeName = BuiltInUIObjectBaseClassType.Name;
+                usings?.AddNamespace(BuiltInUIObjectBaseClassType);
             }
             else if (Utils.IsThisType(type, KnownTypes.IUIElement))
             {
-                destinationTypeName = BuiltInUIElementBaseClassName;
-                usings?.AddNamespace(BuiltInUIElementBaseClassNamespaceName);
+                destinationTypeName = BuiltInUIElementBaseClassType.Name;
+                usings?.AddNamespace(BuiltInUIElementBaseClassType);
+            }
+            else if (Utils.IsThisType(type, KnownTypes.IStandardControl))
+            {
+                destinationTypeName = StandardControlBaseClassType.Name;
+                usings?.AddNamespace(StandardControlBaseClassType);
             }
             else if (Utils.IsUICollectionType(Context, type, out ITypeSymbol elementType))
             {

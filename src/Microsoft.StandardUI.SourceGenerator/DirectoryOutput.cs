@@ -1,4 +1,4 @@
-using Microsoft.StandardUI.SourceGenerator.UIFrameworks;
+﻿using Microsoft.StandardUI.SourceGenerator.UIFrameworks;
 using System.IO;
 
 namespace Microsoft.StandardUI.SourceGenerator
@@ -16,7 +16,7 @@ namespace Microsoft.StandardUI.SourceGenerator
         {
             string outputDirectory = uiFramework != null
                 ? Path.Combine(RootDirectory, "src", uiFramework.ProjectBaseDirectory, "generated")
-                : Path.Combine(RootDirectory, "src", "StandardUI", "generated");
+                : Path.Combine(RootDirectory, "src", "Microsoft.StandardUI", "generated");
 
             if (namespaceName != null)
             {

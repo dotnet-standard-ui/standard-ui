@@ -1,4 +1,4 @@
-namespace Microsoft.StandardUI.SourceGenerator
+﻿namespace Microsoft.StandardUI.SourceGenerator
 {
     public class TypeName
     {
@@ -10,8 +10,8 @@ namespace Microsoft.StandardUI.SourceGenerator
 
         public TypeName(string @namespace, string type)
         {
-            this.Namespace = @namespace;
-            this.Name = type;
+            Namespace = @namespace;
+            Name = type;
         }
     }
 }

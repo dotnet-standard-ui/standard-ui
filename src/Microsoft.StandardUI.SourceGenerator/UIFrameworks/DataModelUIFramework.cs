@@ -1,7 +1,8 @@
-using System.IO;
+﻿using System.IO;
 
 namespace Microsoft.StandardUI.SourceGenerator.UIFrameworks
 {
+#if LATER
     public class DataModelUIFramework : UIFramework
     {
         public DataModelUIFramework(Context context) : base(context)
@@ -24,4 +25,5 @@ namespace Microsoft.StandardUI.SourceGenerator.UIFrameworks
         {
         }
     }
+#endif
 }

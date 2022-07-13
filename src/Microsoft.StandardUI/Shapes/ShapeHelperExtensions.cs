@@ -1,4 +1,4 @@
-using static Microsoft.StandardUI.FactoryStatics;
+using static Microsoft.StandardUI.StandardUIStatics;
 
 namespace Microsoft.StandardUI.Shapes
 {

@@ -1,4 +1,4 @@
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 
 namespace Microsoft.StandardUI.SourceGenerator
@@ -34,6 +34,8 @@ namespace Microsoft.StandardUI.SourceGenerator
 
             _usings.Add(namespaceName);
         }
+
+        public void AddNamespace(TypeName typeName) => AddNamespace(typeName.Namespace);
 
         public void AddTypeAlias(string alias)
         {

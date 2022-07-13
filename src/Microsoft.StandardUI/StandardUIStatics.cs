@@ -1,10 +1,10 @@
-using Microsoft.StandardUI.Controls;
+﻿using Microsoft.StandardUI.Controls;
 using Microsoft.StandardUI.Media;
 using Microsoft.StandardUI.Shapes;
 
 namespace Microsoft.StandardUI
 {
-    public static class FactoryStatics
+    public static class StandardUIStatics
     {
         /*** UI Elements ***/
 
