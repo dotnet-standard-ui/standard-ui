@@ -46,6 +46,12 @@ namespace Microsoft.StandardUI
             return uiElement;
         }
         
+        public static T Margin<T>(this T uiElement, Thickness value) where T : IUIElement
+        {
+            uiElement.Margin = value;
+            return uiElement;
+        }
+        
         public static T VerticalAlignment<T>(this T uiElement, VerticalAlignment value) where T : IUIElement
         {
             uiElement.VerticalAlignment = value;
