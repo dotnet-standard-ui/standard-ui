@@ -6,7 +6,7 @@ using System.Linq;
 using Microsoft.StandardUI;
 using Microsoft.StandardUI.Controls;
 using Microsoft.StandardUI.Shapes;
-using static Microsoft.StandardUI.FactoryStatics;
+using static Microsoft.StandardUI.StandardUIStatics;
 using Microsoft.StandardUI.Media;
 
 namespace Microcharts

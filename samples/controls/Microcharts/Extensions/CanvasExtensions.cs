@@ -8,7 +8,7 @@ using Microsoft.StandardUI.Shapes;
 using Microsoft.StandardUI.Text;
 using SkiaSharp;
 using SkiaSharp.HarfBuzz;
-using static Microsoft.StandardUI.FactoryStatics;
+using static Microsoft.StandardUI.StandardUIStatics;
 
 namespace Microcharts
 {
